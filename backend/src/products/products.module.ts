@@ -9,5 +9,8 @@ import { ProductsService } from './products.service';
     ProductsService,
     ProductsRepository,
   ],
+  exports: [
+    ProductsRepository,
+  ],
 })
 export class ProductsModule {}

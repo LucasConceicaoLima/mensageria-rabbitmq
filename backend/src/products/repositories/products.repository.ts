@@ -44,4 +44,31 @@ export class ProductsRepository {
       },
     });
   }
+
+  async findManyByIds(ids: string[]) {
+    return this.prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
+  async decreaseStock(
+  productId: string,
+  quantity: number,
+  tx: Prisma.TransactionClient = this.prisma,
+) {
+  return tx.product.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      stock: {
+        decrement: quantity,
+      },
+    },
+  });
+}
 }
