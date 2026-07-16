@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import { useNavigate } from "react-router-dom";
 import type { OrderResponse } from "../../../types/OrderResponse";
 import { StatusChip } from "./StatusChip";
 
@@ -21,6 +21,8 @@ interface Props {
 export const OrdersTable = ({
   orders,
 }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -66,7 +68,11 @@ export const OrdersTable = ({
               </TableCell>
 
               <TableCell align="center">
-                <IconButton>
+                <IconButton
+                  onClick={() =>
+                    navigate(`/orders/${order.id}`)
+                  }
+                >
                   <VisibilityIcon />
                 </IconButton>
               </TableCell>

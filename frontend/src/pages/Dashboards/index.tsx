@@ -1,7 +1,143 @@
-import { Typography } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-const DashboardPage = () => {
-  return <Typography variant="h4">Dashboard</Typography>;
-};
+import { useMemo } from "react";
 
-export default DashboardPage;
+import { useOrders } from "../../hooks/useOrders";
+
+import { DashboardCard } from "./components/DashboardCard";
+import { OrderStatusChart } from "./components/OrderStatusChart";
+import { RevenueChart } from "./components/RevenueChart";
+import { LatestOrders } from "./components/LatestOrders";
+
+export default function Dashboard() {
+  const { data: orders = [], isLoading } = useOrders();
+
+  const metrics = useMemo(() => {
+    const pendingOrders = orders.filter(
+      (o) => o.status === "PENDING",
+    );
+
+    const processingOrders = orders.filter(
+      (o) => o.status === "PROCESSING_PAYMENT",
+    );
+
+    const approvedOrders = orders.filter(
+      (o) => o.status === "APPROVED",
+    );
+
+    const rejectedOrders = orders.filter(
+      (o) => o.status === "REJECTED",
+    );
+
+    const sum = (list: typeof orders) =>
+      list.reduce((acc, order) => acc + order.total, 0);
+
+    return {
+      total: orders.length,
+
+      pending: pendingOrders.length,
+      processing: processingOrders.length,
+      approved: approvedOrders.length,
+      rejected: rejectedOrders.length,
+
+      pendingRevenue: sum(pendingOrders),
+      processingRevenue: sum(processingOrders),
+      approvedRevenue: sum(approvedOrders),
+      rejectedRevenue: sum(rejectedOrders),
+    };
+  }, [orders]);
+
+  const latestOrders = useMemo(
+    () => orders.slice(0, 5),
+    [orders],
+  );
+
+  return (
+    <Stack spacing={4}>
+      <Stack>
+        <Typography variant="h4">
+          Dashboard
+        </Typography>
+
+        <Typography
+          color="text.secondary"
+          variant="body1"
+        >
+          Monitor the asynchronous order
+          processing pipeline.
+        </Typography>
+      </Stack>
+
+      <Grid
+        container
+        spacing={3}
+      >
+        <Grid size={{ xs: 12, md: 3 }}>
+          <DashboardCard
+            title="Total Orders"
+            value={metrics.total}
+            loading={isLoading}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <DashboardCard
+            title="Pending"
+            value={metrics.pending}
+            color="warning.main"
+            loading={isLoading}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <DashboardCard
+            title="Approved"
+            value={metrics.approved}
+            color="success.main"
+            loading={isLoading}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <DashboardCard
+            title="Rejected"
+            value={metrics.rejected}
+            color="error.main"
+            loading={isLoading}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        spacing={3}
+      >
+        <Grid size={{ xs: 12, md: 6 }}>
+          <OrderStatusChart
+            pending={metrics.pending}
+            processing={metrics.processing}
+            approved={metrics.approved}
+            rejected={metrics.rejected}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <RevenueChart
+            pending={metrics.pendingRevenue}
+            processing={metrics.processingRevenue}
+            approved={metrics.approvedRevenue}
+            rejected={metrics.rejectedRevenue}
+          />
+        </Grid>
+      </Grid>
+
+      <LatestOrders
+        orders={latestOrders}
+      />
+    </Stack>
+  );
+}
