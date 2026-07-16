@@ -29,7 +29,6 @@ pnpm-debug.log*
 **/.env.test.local
 **/.env.production.local
 
-# Permitir arquivos de exemplo
 !**/.env.example
 
 # ==========================
@@ -37,6 +36,7 @@ pnpm-debug.log*
 # ==========================
 **/prisma/dev.db
 **/prisma/dev.db-journal
+**/prisma/migrations/**/migration_lock.toml
 
 # ==========================
 # Coverage
@@ -75,3 +75,4 @@ temp/
 # Docker 
 # ==========================
 docker-data/
+**/.docker/

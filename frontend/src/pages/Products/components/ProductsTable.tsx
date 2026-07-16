@@ -21,9 +21,24 @@ export const ProductsTable = ({
     products,
 }: Props) => {
     return (
-        <Table>
-            <TableHead>
-                <TableRow>
+        <Table
+            sx={{
+                "& th": {
+                    fontWeight: 700,
+                    backgroundColor: "action.hover",
+                },
+
+                "& td, & th": {
+                    py: 1.5,
+                },
+
+                "& tbody tr:hover": {
+                    backgroundColor: "action.hover",
+                },
+            }}
+        >
+            <TableHead >
+                <TableRow >
                     <TableCell>Name</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Price</TableCell>

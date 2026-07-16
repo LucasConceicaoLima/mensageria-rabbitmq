@@ -4,7 +4,6 @@ import {
   Button,
   CircularProgress,
   Paper,
-  Stack,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -40,31 +39,37 @@ const ProductsPage = () => {
   }
 
   return (
-    <Stack spacing={3}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
+  <Paper
+    elevation={2}
+    sx={{
+      p: 3,
+      borderRadius: 3,
+    }}
+  >
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      m={3}
+    >
+      <Typography
+        variant="h4"
+        fontWeight={600}
       >
-        <Typography variant="h4">
-          Products
-        </Typography>
+        Products
+      </Typography>
 
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-        >
-          New Product
-        </Button>
-      </Box>
+      <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+      >
+        New Product
+      </Button>
+    </Box>
 
-      <Paper sx={{ p: 2 }}>
-        <ProductsTable
-          products={products ?? []}
-        />
-      </Paper>
-    </Stack>
-  );
+    <ProductsTable products={products ?? []} />
+  </Paper>
+);
 };
 
 export default ProductsPage;

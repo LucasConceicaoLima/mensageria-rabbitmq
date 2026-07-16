@@ -1,56 +1,44 @@
 import { api } from "./axios";
 
-export interface OrderItem {
-  id: string;
-  productId: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-}
+import type { ApiResponse } from "../types/ApiResponse";
+import type { CreateOrderDto } from "../types/dto/CreateOrderDto";
+import type { OrderResponse } from "../types/OrderResponse";
 
-export interface Order {
-  id: string;
-  status: string;
-  total: number;
-  createdAt: string;
-  updatedAt: string;
-  items: OrderItem[];
-}
+export const getOrders = async (): Promise<OrderResponse[]> => {
+  const { data } =
+    await api.get<ApiResponse<OrderResponse[]>>("/orders");
 
-export interface CreateOrderItemDto {
-  productId: string;
-  quantity: number;
-}
-
-export interface CreateOrderDto {
-  items: CreateOrderItemDto[];
-}
-
-export const getOrders = async (): Promise<Order[]> => {
-  const { data } = await api.get("/orders");
-  return data;
+  return data.data;
 };
 
 export const getOrderById = async (
   id: string,
-): Promise<Order> => {
-  const { data } = await api.get(`/orders/${id}`);
-  return data;
+): Promise<OrderResponse> => {
+  const { data } =
+    await api.get<ApiResponse<OrderResponse>>(`/orders/${id}`);
+
+  return data.data;
 };
 
 export const createOrder = async (
   dto: CreateOrderDto,
-): Promise<Order> => {
-  const { data } = await api.post("/orders", dto);
-  return data;
+): Promise<OrderResponse> => {
+  const { data } =
+    await api.post<ApiResponse<OrderResponse>>(
+      "/orders",
+      dto,
+    );
+
+  return data.data;
 };
 
 export const processPayment = async (
   id: string,
-): Promise<Order> => {
-  const { data } = await api.patch(
-    `/orders/${id}/process-payment`,
-  );
+): Promise<OrderResponse> => {
+  const { data } =
+    await api.patch<ApiResponse<OrderResponse>>(
+      `/orders/${id}/process-payment`,
+    );
 
-  return data;
+  return data.data;
 };

@@ -24,7 +24,7 @@ import {
 
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
-import { ThemeContext } from "../../theme/themeContext";
+import { ThemeContext } from "../../theme/ThemeContext";
 import { routesConfig } from "../../routes/routes.config";
 
 const drawerWidth = 265;
@@ -43,18 +43,18 @@ export const MainLayout: React.FC = () => {
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const isActive = (itemPath: string) => {
-  const current = location.pathname.split("/");
-  const target = itemPath.split("/");
+    const current = location.pathname.split("/");
+    const target = itemPath.split("/");
 
-  return (
-    current.length === target.length &&
-    current.every((segment, index) => segment === target[index])
-  );
-};
+    return (
+      current.length === target.length &&
+      current.every((segment, index) => segment === target[index])
+    );
+  };
 
   const managementRoutes = routesConfig.filter(
-  (r) => r.section === "management",
-);
+    (r) => r.section === "management",
+  );
   const resultRoutes = routesConfig.filter((r) => r.section === "results");
 
   const drawerContent = (
@@ -151,7 +151,7 @@ export const MainLayout: React.FC = () => {
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          background: "#AA0506",
+          backgroundColor: theme.palette.primary.main,
           borderBottomLeftRadius: 16,
           borderBottomRightRadius: 16,
         }}
@@ -169,7 +169,7 @@ export const MainLayout: React.FC = () => {
           )}
 
           <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
-            Megaten Build Calculator
+            RabbitMQ Order Processing
           </Typography>
 
           <IconButton color="inherit" onClick={toggleTheme}>
@@ -197,7 +197,7 @@ export const MainLayout: React.FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 1,
+          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}

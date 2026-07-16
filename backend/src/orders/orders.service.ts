@@ -4,12 +4,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { OrderStatus, Prisma } from '@prisma/client';
-
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersMapper } from './mappers/orders.mapper';
 import { OrdersRepository } from './repositories/orders.repository';
 import { ProductsRepository } from '../products/repositories/products.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
+import {
+  ORDER_CREATED_EVENT,
+  RABBITMQ_QUEUE,
+} from '../rabbitmq/rabbitmq.constants';
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +21,7 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly ordersRepository: OrdersRepository,
     private readonly productsRepository: ProductsRepository,
+    private readonly rabbitMQService: RabbitMQService,
   ) { }
 
   async create(dto: CreateOrderDto) {
@@ -99,6 +104,15 @@ export class OrdersService {
 
       return createdOrder;
     });
+
+    await this.rabbitMQService.publish(
+      RABBITMQ_QUEUE,
+      {
+        event: ORDER_CREATED_EVENT,
+        orderId: order.id,
+        total: Number(order.total),
+      },
+    );
 
     return OrdersMapper.toResponse(order);
   }
