@@ -3,26 +3,24 @@ import { useEffect, useState } from "react";
 import {
   Grid,
   Stack,
-  Typography,
-  Snackbar,
-  Alert
+  Typography
 } from "@mui/material";
 
 import { useProducts } from "../../hooks/useProducts";
 import { useCreateOrder } from "../../hooks/useCreateOrder";
-
+import { useSnackbar } from "../../context/SnackbarContext";
 import { ProductCard } from "./components/ProductCard";
+import { ProductCardSkeleton } from "./components/ProductCardSkeleton";
 import { OrderSummary } from "./components/OrderSummary";
+import { OrderSummarySkeleton } from "./components/OrderSummarySkeleton";
 
 import type { SelectedProduct } from "../../types/SelectedProduct";
 
 export default function NewOrderPage() {
-  const { data: products = [] } = useProducts();
-
+  const { data: products = [], isLoading } = useProducts();
   const createOrderMutation = useCreateOrder();
-
   const [items, setItems] = useState<SelectedProduct[]>([]);
-  const [successOpen, setSuccessOpen] = useState(false);
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!products.length) {
@@ -69,7 +67,10 @@ export default function NewOrderPage() {
       })),
     });
 
-    setSuccessOpen(true);
+    showSnackbar(
+      "Order created successfully!",
+      "success",
+    );
 
     setItems((prev) =>
       prev.map((item) => ({
@@ -88,53 +89,43 @@ export default function NewOrderPage() {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Stack spacing={2}>
-            {items.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                quantity={product.quantity}
-                onIncrease={() =>
-                  updateQuantity(
-                    product.id,
-                    product.quantity + 1,
-                  )
-                }
-                onDecrease={() =>
-                  updateQuantity(
-                    product.id,
-                    product.quantity - 1,
-                  )
-                }
-              />
-            ))}
+            {isLoading
+              ? Array.from({ length: 6 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))
+              : items.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  quantity={product.quantity}
+                  onIncrease={() =>
+                    updateQuantity(
+                      product.id,
+                      product.quantity + 1,
+                    )
+                  }
+                  onDecrease={() =>
+                    updateQuantity(
+                      product.id,
+                      product.quantity - 1,
+                    )
+                  }
+                />
+              ))}
           </Stack>
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <OrderSummary
-            items={items}
-            onCreate={handleCreateOrder}
-          />
+          {isLoading ? (
+            <OrderSummarySkeleton />
+          ) : (
+            <OrderSummary
+              items={items}
+              onCreate={handleCreateOrder}
+            />
+          )}
         </Grid>
       </Grid>
-
-      <Snackbar
-        open={successOpen}
-        autoHideDuration={3000}
-        onClose={() => setSuccessOpen(false)}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-      >
-        <Alert
-          severity="success"
-          variant="filled"
-          onClose={() => setSuccessOpen(false)}
-        >
-          Order created successfully!
-        </Alert>
-      </Snackbar>
     </>
   );
 }

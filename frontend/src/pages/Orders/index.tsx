@@ -1,12 +1,10 @@
 import {
   Box,
-  CircularProgress,
   Typography,
 } from "@mui/material";
-
 import { useOrders } from "../../hooks/useOrders";
-
 import { OrdersTable } from "./components/OrdersTable";
+import { OrdersTableSkeleton } from "./components/OrdersTableSkeleton";
 
 export default function OrdersPage() {
   const {
@@ -24,7 +22,7 @@ export default function OrdersPage() {
       </Typography>
 
       {isLoading ? (
-        <CircularProgress />
+        <OrdersTableSkeleton />
       ) : (
         <OrdersTable orders={orders} />
       )}

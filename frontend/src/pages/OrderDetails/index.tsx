@@ -1,41 +1,53 @@
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import {
   Box,
-  CircularProgress,
   Grid,
   Typography,
 } from "@mui/material";
 
-import { useParams } from "react-router-dom";
-
 import { useOrder } from "../../hooks/useOrders";
-import { OrderInfo } from "./components/OrderInfo";
-import { OrderItemTable } from "./components/OrderItemTable";
-import { OrderTimeline } from "./components/OrderTimeline";
 import { useOrderEvents } from "../../hooks/useOrderEvents";
 
+import { OrderInfo } from "./components/OrderInfo";
+import { OrderInfoSkeleton } from "./components/OrderInfoSkeleton";
+
+import { OrderItemTable } from "./components/OrderItemTable";
+import { OrderItemTableSkeleton } from "./components/OrderItemTableSkeleton";
+
+import { OrderTimeline } from "./components/OrderTimeline";
+import { OrderTimelineSkeleton } from "./components/OrderTimelineSkeleton";
+
 export default function OrderDetailsPage() {
- const { id } = useParams();
+  const { id } = useParams();
 
-const {
-  data: order,
-  isLoading,
-} = useOrder(id!);
+  const {
+    data: order,
+    isLoading,
+  } = useOrder(id!);
 
-const {
-  data: events = [],
-} = useOrderEvents(id!);
+  const {
+    data: events = [],
+  } = useOrderEvents(id!);
 
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (!order) {
+  if (!order && !isLoading) {
     return (
       <Typography>
         Order not found.
       </Typography>
     );
   }
+
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 5000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   return (
     <Box>
@@ -46,20 +58,29 @@ const {
         Order Details
       </Typography>
 
-      <Grid
-        container
-        spacing={3}
-      >
+      <Grid container spacing={3}>
         <Grid size={8}>
-          <OrderItemTable order={order} />
+          {loading ? (
+            <OrderItemTableSkeleton />
+          ) : (
+            <OrderItemTable order={order!} />
+          )}
         </Grid>
 
         <Grid size={4}>
-          <OrderInfo order={order} />
+          {loading ? (
+            <OrderInfoSkeleton />
+          ) : (
+            <OrderInfo order={order!} />
+          )}
         </Grid>
 
         <Grid size={12}>
-          <OrderTimeline events={events} />
+          {loading ? (
+            <OrderTimelineSkeleton />
+          ) : (
+            <OrderTimeline events={events} />
+          )}
         </Grid>
       </Grid>
     </Box>
