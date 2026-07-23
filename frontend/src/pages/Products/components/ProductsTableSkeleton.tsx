@@ -1,5 +1,4 @@
 import {
-  Paper,
   Skeleton,
   Table,
   TableBody,
@@ -10,13 +9,6 @@ import {
 
 export const ProductsTableSkeleton = () => {
   return (
-    <Paper
-      elevation={2}
-      sx={{
-        p: 3,
-        borderRadius: 3,
-      }}
-    >
       <Table
         sx={{
           "& th": {
@@ -71,6 +63,5 @@ export const ProductsTableSkeleton = () => {
           ))}
         </TableBody>
       </Table>
-    </Paper>
   );
 };

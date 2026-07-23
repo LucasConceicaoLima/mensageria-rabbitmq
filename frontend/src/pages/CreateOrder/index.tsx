@@ -15,6 +15,7 @@ import { OrderSummary } from "./components/OrderSummary";
 import { OrderSummarySkeleton } from "./components/OrderSummarySkeleton";
 
 import type { SelectedProduct } from "../../types/SelectedProduct";
+import { getApiErrorMessage } from "../../utils/getApiErrorMessage";
 
 export default function NewOrderPage() {
   const { data: products = [], isLoading } = useProducts();
@@ -60,24 +61,31 @@ export default function NewOrderPage() {
       return;
     }
 
-    await createOrderMutation.mutateAsync({
-      items: selectedItems.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-      })),
-    });
+    try {
+      await createOrderMutation.mutateAsync({
+        items: selectedItems.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+      });
 
-    showSnackbar(
-      "Order created successfully!",
-      "success",
-    );
+      showSnackbar(
+        "Order created successfully!",
+        "success",
+      );
 
-    setItems((prev) =>
-      prev.map((item) => ({
-        ...item,
-        quantity: 0,
-      })),
-    );
+      setItems((prev) =>
+        prev.map((item) => ({
+          ...item,
+          quantity: 0,
+        })),
+      );
+    } catch (error) {
+      showSnackbar(
+        getApiErrorMessage(error),
+        "error",
+      );
+    }
   };
 
   return (

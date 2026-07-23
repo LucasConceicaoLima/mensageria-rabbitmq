@@ -13,6 +13,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import type { OrderResponse } from "../../../types/OrderResponse";
 import { StatusChip } from "./StatusChip";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
+import { formatDateBr } from "../../../utils/formatDateBr";
 
 interface Props {
   orders: OrderResponse[];
@@ -52,19 +54,11 @@ export const OrdersTable = ({
               </TableCell>
 
               <TableCell>
-                {order.total.toLocaleString(
-                  "pt-BR",
-                  {
-                    style: "currency",
-                    currency: "BRL",
-                  },
-                )}
+                {formatCurrencyBrl(order.total)}
               </TableCell>
 
               <TableCell>
-                {new Date(
-                  order.createdAt,
-                ).toLocaleString("pt-BR")}
+                {formatDateBr(order.createdAt)}
               </TableCell>
 
               <TableCell align="center">

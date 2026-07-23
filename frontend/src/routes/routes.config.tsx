@@ -2,7 +2,7 @@ import {
   Dashboard,
   Inventory2,
   ShoppingCart,
-  ReceiptLong,
+  AddShoppingCart,
 } from "@mui/icons-material";
 
 import { lazy } from "react";
@@ -53,7 +53,7 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/orders/new",
     label: "New Order",
-    icon: <ReceiptLong />,
+    icon: <AddShoppingCart />,
     element: <CreateOrderPage />,
     section: "management",
   },

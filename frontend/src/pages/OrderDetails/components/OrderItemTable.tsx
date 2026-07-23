@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import type { OrderResponse } from "../../../types/OrderResponse";
+import { formatCurrency } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   order: OrderResponse;
@@ -53,7 +54,7 @@ export const OrderItemTable = ({
             {order.items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  {item.productId}
+                  {item.product.name}
                 </TableCell>
 
                 <TableCell>
@@ -61,23 +62,11 @@ export const OrderItemTable = ({
                 </TableCell>
 
                 <TableCell>
-                  {item.unitPrice.toLocaleString(
-                    "pt-BR",
-                    {
-                      style: "currency",
-                      currency: "BRL",
-                    },
-                  )}
+                  {formatCurrency(item.unitPrice)}
                 </TableCell>
 
                 <TableCell>
-                  {item.subtotal.toLocaleString(
-                    "pt-BR",
-                    {
-                      style: "currency",
-                      currency: "BRL",
-                    },
-                  )}
+                  {formatCurrency(item.subtotal)}
                 </TableCell>
               </TableRow>
             ))}

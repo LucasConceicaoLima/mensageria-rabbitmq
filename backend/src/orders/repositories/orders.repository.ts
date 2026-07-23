@@ -14,7 +14,11 @@ export class OrdersRepository {
     return tx.order.create({
       data,
       include: {
-        items: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
         events: true,
       },
     });
@@ -23,7 +27,11 @@ export class OrdersRepository {
   async findAll() {
     return this.prisma.order.findMany({
       include: {
-        items: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
         events: true,
       },
       orderBy: {
@@ -36,7 +44,11 @@ export class OrdersRepository {
     return this.prisma.order.findUnique({
       where: { id },
       include: {
-        items: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
         events: true,
       },
     });
@@ -53,20 +65,24 @@ export class OrdersRepository {
         status,
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
         events: true,
       },
     });
   }
 
   async findEvents(orderId: string) {
-  return this.prisma.orderEvent.findMany({
-    where: {
-      orderId,
-    },
-    orderBy: {
-      createdAt: 'asc',
-    },
-  });
-}
+    return this.prisma.orderEvent.findMany({
+      where: {
+        orderId,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+  }
 }

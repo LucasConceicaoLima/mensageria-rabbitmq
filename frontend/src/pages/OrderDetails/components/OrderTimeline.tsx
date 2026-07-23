@@ -10,6 +10,7 @@ import {
 import { Typography, Paper } from "@mui/material";
 
 import type { OrderEventResponse } from "../../../types/OrderEventResponse";
+import { formatDateBr } from "../../../utils/formatDateBr";
 
 interface Props {
   events: OrderEventResponse[];
@@ -70,9 +71,7 @@ export const OrderTimeline = ({
                 variant="caption"
                 color="text.secondary"
               >
-                {new Date(
-                  event.createdAt,
-                ).toLocaleString("pt-BR")}
+                {formatDateBr(event.createdAt)}
               </Typography>
             </TimelineContent>
           </TimelineItem>

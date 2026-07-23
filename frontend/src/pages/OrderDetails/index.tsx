@@ -1,6 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-
 import {
   Box,
   Grid,
@@ -39,16 +37,6 @@ export default function OrderDetailsPage() {
     );
   }
 
-  const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setLoading(false);
-  }, 5000);
-
-  return () => clearTimeout(timer);
-}, []);
-
   return (
     <Box>
       <Typography
@@ -60,7 +48,7 @@ useEffect(() => {
 
       <Grid container spacing={3}>
         <Grid size={8}>
-          {loading ? (
+          {isLoading ? (
             <OrderItemTableSkeleton />
           ) : (
             <OrderItemTable order={order!} />
@@ -68,7 +56,7 @@ useEffect(() => {
         </Grid>
 
         <Grid size={4}>
-          {loading ? (
+          {isLoading ? (
             <OrderInfoSkeleton />
           ) : (
             <OrderInfo order={order!} />
@@ -76,7 +64,7 @@ useEffect(() => {
         </Grid>
 
         <Grid size={12}>
-          {loading ? (
+          {isLoading ? (
             <OrderTimelineSkeleton />
           ) : (
             <OrderTimeline events={events} />

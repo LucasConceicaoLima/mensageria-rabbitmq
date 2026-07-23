@@ -8,36 +8,13 @@ import {
 } from "@mui/material";
 
 import type { OrderResponse } from "../../../types/OrderResponse";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
+import { formatDateBr } from "../../../utils/formatDateBr";
+import { getStatusColor } from "../../../utils/getStatusColor";
 
 interface Props {
   order: OrderResponse;
 }
-
-const getStatusColor = (
-  status: string,
-):
-  | "warning"
-  | "info"
-  | "success"
-  | "error"
-  | "default" => {
-  switch (status) {
-    case "PENDING":
-      return "warning";
-
-    case "PROCESSING_PAYMENT":
-      return "info";
-
-    case "APPROVED":
-      return "success";
-
-    case "REJECTED":
-      return "error";
-
-    default:
-      return "default";
-  }
-};
 
 export const OrderInfo = ({
   order,
@@ -95,13 +72,7 @@ export const OrderInfo = ({
             </Typography>
 
             <Typography variant="h5">
-              {order.total.toLocaleString(
-                "pt-BR",
-                {
-                  style: "currency",
-                  currency: "BRL",
-                },
-              )}
+              {formatCurrencyBrl(order.total)}
             </Typography>
           </div>
 
@@ -114,9 +85,7 @@ export const OrderInfo = ({
             </Typography>
 
             <Typography>
-              {new Date(
-                order.createdAt,
-              ).toLocaleString()}
+              {formatDateBr(order.createdAt)}
             </Typography>
           </div>
 
@@ -129,9 +98,7 @@ export const OrderInfo = ({
             </Typography>
 
             <Typography>
-              {new Date(
-                order.updatedAt,
-              ).toLocaleString()}
+              {formatDateBr(order.updatedAt)}
             </Typography>
           </div>
         </Stack>

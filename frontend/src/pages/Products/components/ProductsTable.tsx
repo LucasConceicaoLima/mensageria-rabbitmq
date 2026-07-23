@@ -12,6 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import type { Product } from "../../../types/Product";
+import { formatCurrency } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   products: Product[];
@@ -64,13 +65,7 @@ export const ProductsTable = ({
             </TableCell>
 
             <TableCell>
-              {product.price.toLocaleString(
-                "pt-BR",
-                {
-                  style: "currency",
-                  currency: "BRL",
-                },
-              )}
+              {formatCurrency(product.price)}
             </TableCell>
 
             <TableCell>

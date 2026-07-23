@@ -70,96 +70,123 @@ export default function Dashboard() {
         </Typography>
       </Stack>
 
-      <Grid
-        container
-        spacing={3}
-      >
-        <Grid size={{ xs: 12, md: 3 }}>
-          {isLoading ? (
-            <DashboardCardSkeleton />
-          ) : (
-            <DashboardCard
-              title="Total Orders"
-              value={metrics.total}
-            />
-          )}
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          {isLoading ? (
-            <DashboardCardSkeleton />
-          ) : (
-            <DashboardCard
-              title="Pending"
-              value={metrics.pending}
-              color="warning.main"
-              loading={isLoading}
-            />
-          )}
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          {isLoading ? (
-            <DashboardCardSkeleton />
-          ) : (
-            <DashboardCard
-              title="Approved"
-              value={metrics.approved}
-              color="success.main"
-              loading={isLoading}
-            />
-          )}
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          {isLoading ? (
-            <DashboardCardSkeleton />
-          ) : (
-            <DashboardCard
-              title="Rejected"
-              value={metrics.rejected}
-              color="error.main"
-              loading={isLoading}
-            />
-          )}
-        </Grid>
-      </Grid>
-
-      <Grid
-        container
-        spacing={3}
-      >
-        <Grid size={{ xs: 12, md: 6 }}>
-          {isLoading ? (
-            <OrderStatusChartSkeleton />
-          ) : (
-            <OrderStatusChart
-              pending={metrics.pending}
-              processing={metrics.processing}
-              approved={metrics.approved}
-              rejected={metrics.rejected}
-            />
-          )}
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          {isLoading ? (
-            <RevenueChartSkeleton />
-          ) : (
-            <RevenueChart
-              pending={metrics.pendingRevenue}
-              processing={metrics.processingRevenue}
-              approved={metrics.approvedRevenue}
-              rejected={metrics.rejectedRevenue}
-            />
-          )}
-        </Grid>
-      </Grid>
-
       {isLoading ? (
-        <LatestOrdersSkeleton />
+        <>
+          <Grid
+            container
+            spacing={3}
+          >
+            {Array.from({ length: 4 }).map(
+              (_, index) => (
+                <Grid
+                  key={index}
+                  size={{ xs: 12, md: 3 }}
+                >
+                  <DashboardCardSkeleton />
+                </Grid>
+              ),
+            )}
+          </Grid>
+
+          <Grid
+            container
+            spacing={3}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
+              <OrderStatusChartSkeleton />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RevenueChartSkeleton />
+            </Grid>
+          </Grid>
+
+          <LatestOrdersSkeleton />
+        </>
+      ) : orders.length === 0 ? (
+        <Stack
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ py: 10 }}
+        >
+          <Typography variant="h6">
+            No data available
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+          >
+            Create your first order to view
+            charts, metrics and recent activity.
+          </Typography>
+        </Stack>
       ) : (
-        <LatestOrders orders={latestOrders} />
+        <>
+          <Grid
+            container
+            spacing={3}
+          >
+            <Grid size={{ xs: 12, md: 3 }}>
+              <DashboardCard
+                title="Total Orders"
+                value={metrics.total}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 3 }}>
+              <DashboardCard
+                title="Pending"
+                value={metrics.pending}
+                color="warning.main"
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 3 }}>
+              <DashboardCard
+                title="Approved"
+                value={metrics.approved}
+                color="success.main"
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 3 }}>
+              <DashboardCard
+                title="Rejected"
+                value={metrics.rejected}
+                color="error.main"
+              />
+            </Grid>
+          </Grid>
+
+          <Grid
+            container
+            spacing={3}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
+              <OrderStatusChart
+                pending={metrics.pending}
+                processing={metrics.processing}
+                approved={metrics.approved}
+                rejected={metrics.rejected}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <RevenueChart
+                pending={metrics.pendingRevenue}
+                processing={metrics.processingRevenue}
+                approved={metrics.approvedRevenue}
+                rejected={metrics.rejectedRevenue}
+              />
+            </Grid>
+          </Grid>
+
+          <LatestOrders
+            orders={latestOrders}
+          />
+        </>
       )}
     </Stack>
   );

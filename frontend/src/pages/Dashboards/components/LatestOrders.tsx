@@ -11,8 +11,10 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-
 import type { OrderResponse } from "../../../types/OrderResponse";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
+import { formatDateBr } from "../../../utils/formatDateBr";
+import { getStatusColor } from "../../../utils/getStatusColor";
 
 interface Props {
   orders: OrderResponse[];
@@ -23,30 +25,6 @@ export const LatestOrders = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  const getChipColor = (
-    status: string,
-  ):
-    | "warning"
-    | "success"
-    | "error"
-    | "info" => {
-    switch (status) {
-      case "PENDING":
-        return "warning";
-
-      case "PROCESSING_PAYMENT":
-        return "info";
-
-      case "APPROVED":
-        return "success";
-
-      case "REJECTED":
-        return "error";
-
-      default:
-        return "info";
-    }
-  };
 
   return (
     <Card
@@ -97,7 +75,7 @@ export const LatestOrders = ({
                       "_",
                       " ",
                     )}
-                    color={getChipColor(
+                    color={getStatusColor(
                       order.status,
                     )}
                     size="small"
@@ -105,19 +83,11 @@ export const LatestOrders = ({
                 </TableCell>
 
                 <TableCell>
-                  {order.total.toLocaleString(
-                    "pt-BR",
-                    {
-                      style: "currency",
-                      currency: "BRL",
-                    },
-                  )}
+                  {formatCurrencyBrl(order.total)}
                 </TableCell>
 
                 <TableCell>
-                  {new Date(
-                    order.createdAt,
-                  ).toLocaleString("pt-BR")}
+                  {formatDateBr(order.createdAt)}
                 </TableCell>
               </TableRow>
             ))}
