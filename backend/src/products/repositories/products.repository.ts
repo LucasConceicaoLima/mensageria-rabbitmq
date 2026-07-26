@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductsRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: Prisma.ProductCreateInput) {
     return this.prisma.product.create({
@@ -56,19 +56,19 @@ export class ProductsRepository {
   }
 
   async decreaseStock(
-  productId: string,
-  quantity: number,
-  tx: Prisma.TransactionClient = this.prisma,
-) {
-  return tx.product.update({
-    where: {
-      id: productId,
-    },
-    data: {
-      stock: {
-        decrement: quantity,
+    productId: string,
+    quantity: number,
+    tx: Prisma.TransactionClient = this.prisma,
+  ) {
+    return tx.product.update({
+      where: {
+        id: productId,
       },
-    },
-  });
-}
+      data: {
+        stock: {
+          decrement: quantity,
+        },
+      },
+    });
+  }
 }

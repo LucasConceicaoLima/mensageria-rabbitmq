@@ -1,9 +1,5 @@
 import { AxiosError } from "axios";
 
-interface ApiError {
-  message?: string;
-}
-
 export function getApiErrorMessage(error: unknown) {
   if (error instanceof AxiosError) {
     return (

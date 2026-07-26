@@ -1,6 +1,6 @@
 import { AppRoutes } from "./routes/AppRoutes";
 import { ThemeContextProvider } from "./theme/ThemeContext";
-import { SnackbarContextProvider } from "./context/SnackbarContext";
+import { SnackbarContextProvider } from "./context/SnackbarProvider";
 
 function App() {
   return (

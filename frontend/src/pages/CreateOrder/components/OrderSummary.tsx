@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import type { SelectedProduct } from "../../../types/SelectedProduct";
-import { formatCurrency}  from "../../../utils/formatCurrencyBrl";
+import { formatCurrencyBrl}  from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   items: SelectedProduct[];
@@ -54,7 +54,7 @@ export const OrderSummary = ({
                 </Typography>
 
                 <Typography>
-                  {formatCurrency(item.price * item.quantity)}
+                  {formatCurrencyBrl(item.price * item.quantity)}
                 </Typography>
               </Stack>
             ))}
@@ -68,7 +68,7 @@ export const OrderSummary = ({
           fontWeight={700}
         >
           Total:{" "}
-          {formatCurrency(total)}
+          {formatCurrencyBrl(total)}
         </Typography>
 
         <Button

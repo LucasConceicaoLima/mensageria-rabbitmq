@@ -16,7 +16,7 @@ import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
     PrismaModule,
     ProductsModule,
     OrdersModule,
-    RabbitMQModule
+    RabbitMQModule,
   ],
   controllers: [AppController],
   providers: [AppService],

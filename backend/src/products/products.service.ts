@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -10,9 +7,7 @@ import { ProductsRepository } from './repositories/products.repository';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    private readonly productsRepository: ProductsRepository,
-  ) {}
+  constructor(private readonly productsRepository: ProductsRepository) {}
 
   async create(dto: CreateProductDto) {
     const product = await this.productsRepository.create(dto);
@@ -23,7 +18,7 @@ export class ProductsService {
   async findAll() {
     const products = await this.productsRepository.findAll();
 
-    return products.map(ProductsMapper.toResponse);
+    return products.map((product) => ProductsMapper.toResponse(product));
   }
 
   async findById(id: string) {
@@ -37,24 +32,24 @@ export class ProductsService {
   }
 
   async update(id: string, dto: UpdateProductDto) {
-  const existingProduct = await this.productsRepository.findById(id);
+    const existingProduct = await this.productsRepository.findById(id);
 
-  if (!existingProduct) {
-    throw new NotFoundException('Product not found.');
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found.');
+    }
+
+    const updatedProduct = await this.productsRepository.update(id, dto);
+
+    return ProductsMapper.toResponse(updatedProduct);
   }
 
-  const updatedProduct = await this.productsRepository.update(id, dto);
+  async delete(id: string) {
+    const existingProduct = await this.productsRepository.findById(id);
 
-  return ProductsMapper.toResponse(updatedProduct);
-}
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found.');
+    }
 
-async delete(id: string) {
-  const existingProduct = await this.productsRepository.findById(id);
-
-  if (!existingProduct) {
-    throw new NotFoundException('Product not found.');
+    await this.productsRepository.delete(id);
   }
-
-  await this.productsRepository.delete(id);
-}
 }

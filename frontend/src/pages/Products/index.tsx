@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import { useSnackbar } from "../../context/SnackbarContext";
+import { useSnackbar } from "../../hooks/useSnackbar";
 import { useProducts } from "../../hooks/useProducts";
 import { useCreateProduct } from "../../hooks/useCreateProducts";
 import { useUpdateProduct } from "../../hooks/useUpdateProducts";

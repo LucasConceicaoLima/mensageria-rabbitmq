@@ -22,7 +22,7 @@ export class OrdersService {
     private readonly ordersRepository: OrdersRepository,
     private readonly productsRepository: ProductsRepository,
     private readonly rabbitMQService: RabbitMQService,
-  ) { }
+  ) {}
 
   async create(dto: CreateOrderDto) {
     const productIds = dto.items.map((item) => item.productId);
@@ -30,9 +30,7 @@ export class OrdersService {
     const products = await this.productsRepository.findManyByIds(productIds);
 
     if (products.length !== productIds.length) {
-      throw new NotFoundException(
-        'One or more products were not found.',
-      );
+      throw new NotFoundException('One or more products were not found.');
     }
 
     const productsMap = new Map(
@@ -47,9 +45,7 @@ export class OrdersService {
       const product = productsMap.get(item.productId);
 
       if (!product) {
-        throw new NotFoundException(
-          `Product ${item.productId} not found.`,
-        );
+        throw new NotFoundException(`Product ${item.productId} not found.`);
       }
 
       if (product.stock < item.quantity) {
@@ -105,14 +101,11 @@ export class OrdersService {
       return createdOrder;
     });
 
-    await this.rabbitMQService.publish(
-      RABBITMQ_QUEUE,
-      {
-        event: ORDER_CREATED_EVENT,
-        orderId: order.id,
-        total: Number(order.total),
-      },
-    );
+    this.rabbitMQService.publish(RABBITMQ_QUEUE, {
+      event: ORDER_CREATED_EVENT,
+      orderId: order.id,
+      total: Number(order.total),
+    });
 
     return OrdersMapper.toResponse(order);
   }
@@ -142,6 +135,6 @@ export class OrdersService {
 
     const events = await this.ordersRepository.findEvents(orderId);
 
-    return events.map(OrdersMapper.toEventResponse);
+    return events.map((event) => OrdersMapper.toEventResponse(event));
   }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import {
   Dashboard,
   Inventory2,
@@ -7,7 +9,7 @@ import {
 
 import { lazy } from "react";
 
-export interface RouteConfig {
+interface RouteConfig {
   path: string;
   label?: string;
   icon?: React.ReactNode;

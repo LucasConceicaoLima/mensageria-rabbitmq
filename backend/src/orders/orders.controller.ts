@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,9 +15,7 @@ import { OrderEventResponseDto } from './dto/order-event-response.dto';
 @ApiTags('Orders')
 @Controller('orders')
 export class OrdersController {
-  constructor(
-    private readonly ordersService: OrdersService,
-  ) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
   @ResponseMessage('Order created successfully.')

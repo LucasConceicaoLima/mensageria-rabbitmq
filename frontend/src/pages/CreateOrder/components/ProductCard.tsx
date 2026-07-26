@@ -7,7 +7,7 @@ import {
 
 import type { Product } from "../../../types/Product";
 import { QuantitySelector } from "./QuantitySelector";
-import { formatCurrency } from "../../../utils/formatCurrencyBrl";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   product: Product;
@@ -47,7 +47,7 @@ export const ProductCard = ({
             color="primary"
             fontWeight={700}
           >
-            {formatCurrency(product.price)}
+            {formatCurrencyBrl(product.price)}
           </Typography>
 
           <QuantitySelector

@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { formatCurrency } from "../../../utils/formatCurrencyBrl";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   pending: number;
@@ -65,7 +65,7 @@ export const RevenueChart = ({
               valueFormatter: (value) =>
                 value == null
                   ? ""
-                  : formatCurrency(value),
+                  : formatCurrencyBrl(value),
             },
           ]}
         />

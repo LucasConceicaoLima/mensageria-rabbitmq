@@ -97,10 +97,7 @@ export class ProductsController {
   @ApiNotFoundResponse({
     description: 'Product not found.',
   })
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateProductDto,
-  ) {
+  update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
     return this.productsService.update(id, dto);
   }
 

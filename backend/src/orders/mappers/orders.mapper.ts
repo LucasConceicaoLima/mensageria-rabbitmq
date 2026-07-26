@@ -33,9 +33,7 @@ export class OrdersMapper {
     };
   }
 
-  static toEventResponse(
-    event: OrderEvent,
-  ): OrderEventResponseDto {
+  static toEventResponse(event: OrderEvent): OrderEventResponseDto {
     return {
       id: event.id,
       status: event.status,
