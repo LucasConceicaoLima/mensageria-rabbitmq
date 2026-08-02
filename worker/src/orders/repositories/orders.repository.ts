@@ -5,7 +5,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class OrdersRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async findById(id: string) {
     return this.prisma.order.findUnique({
@@ -20,12 +20,14 @@ export class OrdersRepository {
   async updateStatus(
     id: string,
     status: OrderStatus,
+    data: Prisma.OrderUpdateInput = {},
     tx: Prisma.TransactionClient = this.prisma,
   ) {
     return tx.order.update({
       where: { id },
       data: {
         status,
+        ...data,
       },
       include: {
         items: true,

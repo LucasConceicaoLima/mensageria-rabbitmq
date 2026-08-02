@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import type { OrderResponse } from "../../../types/OrderResponse";
-import { formatCurrency } from "../../../utils/formatCurrencyBrl";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   order: OrderResponse;
@@ -62,11 +62,11 @@ export const OrderItemTable = ({
                 </TableCell>
 
                 <TableCell>
-                  {formatCurrency(item.unitPrice)}
+                  {formatCurrencyBrl(item.unitPrice)}
                 </TableCell>
 
                 <TableCell>
-                  {formatCurrency(item.subtotal)}
+                  {formatCurrencyBrl(item.subtotal)}
                 </TableCell>
               </TableRow>
             ))}

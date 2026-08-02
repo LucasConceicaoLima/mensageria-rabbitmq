@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -13,10 +14,12 @@ import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+
     PrismaModule,
     ProductsModule,
     OrdersModule,
     RabbitMQModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

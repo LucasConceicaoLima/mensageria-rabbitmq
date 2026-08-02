@@ -5,10 +5,6 @@ import { OrderConsumerService } from './order-consumer.service';
 import { PaymentService } from './payment.service';
 
 @Module({
-  providers: [
-    OrdersRepository,
-    OrderConsumerService,
-    PaymentService,
-  ],
+  providers: [OrdersRepository, OrderConsumerService, PaymentService],
 })
 export class OrdersModule {}

@@ -11,13 +11,14 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import type { OrderResponse } from "../../../types/OrderResponse";
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 import { formatDateBr } from "../../../utils/formatDateBr";
 import { getStatusColor } from "../../../utils/getStatusColor";
 
+import type { LatestOrders as Latest } from "../../../types/dashboard/LatestOrders";
+
 interface Props {
-  orders: OrderResponse[];
+  orders: Latest[];
 }
 
 export const LatestOrders = ({

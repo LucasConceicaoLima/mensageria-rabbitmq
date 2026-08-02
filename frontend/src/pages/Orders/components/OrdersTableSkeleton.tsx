@@ -11,7 +11,7 @@ import {
 
 export const OrdersTableSkeleton = () => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} elevation={5}>
       <Table>
         <TableHead>
           <TableRow>

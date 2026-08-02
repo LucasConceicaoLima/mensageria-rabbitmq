@@ -3,10 +3,13 @@ import {
   Alert,
   Box,
   Button,
+  InputAdornment,
   Paper,
+  TextField,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { useSnackbar } from "../../hooks/useSnackbar";
 import { useProducts } from "../../hooks/useProducts";
@@ -37,6 +40,8 @@ const ProductsPage = () => {
 
   const { showSnackbar } = useSnackbar();
 
+  const [search, setSearch] = useState("");
+
   const [formOpen, setFormOpen] =
     useState(false);
 
@@ -45,6 +50,13 @@ const ProductsPage = () => {
 
   const [selectedProduct, setSelectedProduct] =
     useState<Product>();
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name
+        .toLowerCase()
+        .includes(search.toLowerCase()),
+  );
 
   const handleCreate = () => {
     setSelectedProduct(undefined);
@@ -127,7 +139,7 @@ const ProductsPage = () => {
   if (isLoading) {
     return (
       <Paper
-        elevation={2}
+        elevation={5}
         sx={{
           p: 3,
           borderRadius: 3,
@@ -138,6 +150,7 @@ const ProductsPage = () => {
           justifyContent="space-between"
           alignItems="center"
           mb={3}
+          p={2}
         >
           <Typography
             variant="h4"
@@ -171,7 +184,7 @@ const ProductsPage = () => {
   return (
     <>
       <Paper
-        elevation={2}
+        elevation={5}
         sx={{
           p: 3,
           borderRadius: 3,
@@ -182,6 +195,7 @@ const ProductsPage = () => {
           justifyContent="space-between"
           alignItems="center"
           mb={3}
+          p={2}
         >
           <Typography
             variant="h4"
@@ -198,6 +212,26 @@ const ProductsPage = () => {
             New Product
           </Button>
         </Box>
+
+        {products.length > 0 && (
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            sx={{ mb: 3 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
 
         {products.length === 0 ? (
           <Box
@@ -220,9 +254,29 @@ const ProductsPage = () => {
               receiving orders.
             </Typography>
           </Box>
+        ) : filteredProducts.length === 0 ? (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            py={8}
+            gap={2}
+          >
+            <Typography variant="h6">
+              No products match your search
+            </Typography>
+
+            <Typography
+              color="text.secondary"
+              textAlign="center"
+            >
+              Try searching with a different name.
+            </Typography>
+          </Box>
         ) : (
           <ProductsTable
-            products={products}
+            products={filteredProducts}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />

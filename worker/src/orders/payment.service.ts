@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { OrderStatus } from '@prisma/client';
 
 import { OrdersRepository } from './repositories/orders.repository';
@@ -19,9 +15,7 @@ export class PaymentService {
     const order = await this.ordersRepository.findById(orderId);
 
     if (!order) {
-      throw new NotFoundException(
-        `Order ${orderId} not found.`,
-      );
+      throw new NotFoundException(`Order ${orderId} not found.`);
     }
 
     // Atualiza para PROCESSING_PAYMENT
@@ -29,6 +23,7 @@ export class PaymentService {
       await this.ordersRepository.updateStatus(
         order.id,
         OrderStatus.PROCESSING_PAYMENT,
+        {},
         tx,
       );
 
@@ -50,10 +45,10 @@ export class PaymentService {
       `Order ${order.id} is now PROCESSING_PAYMENT.`,
     );
 
-    // Simula o tempo de um gateway de pagamento
+    // Simula um gateway de pagamento
     await this.sleep(3000);
 
-    // Regra de aprovação (temporária)
+    // Regra temporária de aprovação
     const approved = Number(order.total) <= 1000;
 
     const finalStatus = approved
@@ -65,6 +60,9 @@ export class PaymentService {
       await this.ordersRepository.updateStatus(
         order.id,
         finalStatus,
+        {
+          approvedAt: approved ? new Date() : null,
+        },
         tx,
       );
 

@@ -5,24 +5,13 @@ export const getTheme = (mode: "light" | "dark") =>
     typography: {
       fontFamily: '"Poppins", sans-serif',
 
-      h1: {
-        fontWeight: 700,
-      },
-      h2: {
-        fontWeight: 700,
-      },
-      h3: {
-        fontWeight: 700,
-      },
-      h4: {
-        fontWeight: 600,
-      },
-      h5: {
-        fontWeight: 600,
-      },
-      h6: {
-        fontWeight: 600,
-      },
+      h1: { fontWeight: 700 },
+      h2: { fontWeight: 700 },
+      h3: { fontWeight: 700 },
+      h4: { fontWeight: 600 },
+      h5: { fontWeight: 600 },
+      h6: { fontWeight: 600 },
+
       button: {
         fontWeight: 600,
       },
@@ -32,37 +21,33 @@ export const getTheme = (mode: "light" | "dark") =>
       mode,
 
       primary: {
-        main: "#F97316", // Tangerine
+        main: "#F97316",
         light: "#FB923C",
         dark: "#EA580C",
         contrastText: "#FFFFFF",
       },
 
       secondary: {
-        main: "#F59E0B", // Mango
+        main: "#F59E0B",
         light: "#FBBF24",
         dark: "#D97706",
         contrastText: "#2A211C",
       },
 
       background: {
-        default: mode === "light" ? "#FFF9F4" : "#0D0A08",
-
-        paper: mode === "light" ? "#FFFFFF" : "#171311",
+        default: mode === "light" ? "#F6F1EB" : "#0D0A08",
+        paper: mode === "light" ? "#FCFBFA" : "#171311",
       },
 
       text: {
         primary: mode === "light" ? "#2A211C" : "#FAF7F3",
-
-        secondary: mode === "light" ? "#6B5B52" : "#C9BFB8",
+        secondary: mode === "light" ? "#6E5D54" : "#C9BFB8",
       },
 
-      divider: mode === "light" ? "#F1D9C7" : "#30251F",
-
-      info: {
-        main: "#4B3621",
-        contrastText: "#FFFFFF",
-      },
+      divider:
+        mode === "light"
+          ? "#E8D6C8"
+          : "#30251F",
 
       success: {
         main: "#22C55E",
@@ -75,39 +60,52 @@ export const getTheme = (mode: "light" | "dark") =>
       error: {
         main: "#EF4444",
       },
+
+      info: {
+        main: "#4B3621",
+      },
     },
 
     shape: {
-      borderRadius: 18,
+      borderRadius: 16,
     },
 
     components: {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            backgroundColor: mode === "light" ? "#FFF9F4" : "#0D0A08",
+            backgroundColor:
+              mode === "light"
+                ? "#F6F1EB"
+                : "#0D0A08",
+
             backgroundImage:
               mode === "light"
-                ? "radial-gradient(circle at top,#FFF4E8 0%,#FFF9F4 45%,#FFF9F4 100%)"
+                ? "none"
                 : "radial-gradient(circle at top,#22160F 0%,#0D0A08 45%,#0D0A08 100%)",
           },
         },
       },
 
-      MuiPaper: {
+      MuiCard: {
         styleOverrides: {
           root: {
-            backgroundImage: "none",
+            background:
+              mode === "light"
+                ? "linear-gradient(180deg,#FFFFFF,#FCFBFA)"
+                : "#171311",
+
+            borderRadius: 16,
 
             border:
               mode === "light"
-                ? "1px solid #F5E1D5"
-                : "1px solid #2A211C",
+                ? "1px solid #E8D6C8"
+                : "1px solid #30251F",
 
             boxShadow:
               mode === "light"
-                ? "0 8px 30px rgba(120,72,26,.08)"
-                : "0 12px 36px rgba(0,0,0,.45)",
+                ? "0 10px 26px rgba(70,45,25,.08)"
+                : "0 12px 30px rgba(0,0,0,.35)",
           },
         },
       },
@@ -119,12 +117,12 @@ export const getTheme = (mode: "light" | "dark") =>
 
             backgroundColor:
               mode === "light"
-                ? "#FFFFFF"
+                ? "#F9F6F2"
                 : "#171311",
 
             borderRight:
               mode === "light"
-                ? "1px solid #F1D9C7"
+                ? "1px solid #E8D6C8"
                 : "1px solid #30251F",
           },
         },
@@ -137,8 +135,8 @@ export const getTheme = (mode: "light" | "dark") =>
 
             backgroundColor:
               mode === "light"
-                ? "rgba(255,255,255,.88)"
-                : "rgba(23,19,17,.88)",
+                ? "rgba(252,249,246,.90)"
+                : "rgba(23,19,17,.90)",
 
             backdropFilter: "blur(14px)",
 
@@ -149,28 +147,10 @@ export const getTheme = (mode: "light" | "dark") =>
 
             borderBottom:
               mode === "light"
-                ? "1px solid #F1D9C7"
+                ? "1px solid #E8D6C8"
                 : "1px solid #30251F",
 
             boxShadow: "none",
-          },
-        },
-      },
-
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: 20,
-
-            border:
-              mode === "light"
-                ? "1px solid #F4E0D0"
-                : "1px solid #30251F",
-
-            boxShadow:
-              mode === "light"
-                ? "0 10px 24px rgba(249,115,22,.08)"
-                : "0 10px 28px rgba(0,0,0,.35)",
           },
         },
       },
@@ -179,8 +159,7 @@ export const getTheme = (mode: "light" | "dark") =>
         styleOverrides: {
           root: {
             textTransform: "none",
-            borderRadius: 14,
-            fontWeight: 600,
+            borderRadius: 12,
             padding: "10px 22px",
             transition: "all .25s ease",
           },
@@ -189,17 +168,17 @@ export const getTheme = (mode: "light" | "dark") =>
             color: "#FFF",
 
             background:
-              "linear-gradient(135deg,#F97316 0%,#FB923C 55%,#FBBF24 100%)",
+              "linear-gradient(135deg,#F97316,#FB923C)",
 
             boxShadow:
-              "0 10px 25px rgba(249,115,22,.30)",
+              "0 8px 20px rgba(249,115,22,.18)",
 
             "&:hover": {
               background:
-                "linear-gradient(135deg,#EA580C 0%,#F97316 55%,#F59E0B 100%)",
+                "linear-gradient(135deg,#EA580C,#F97316)",
 
               boxShadow:
-                "0 14px 34px rgba(249,115,22,.40)",
+                "0 12px 28px rgba(249,115,22,.24)",
 
               transform: "translateY(-2px)",
             },
@@ -214,7 +193,7 @@ export const getTheme = (mode: "light" | "dark") =>
 
             "&:hover": {
               borderColor: "#EA580C",
-              background: "rgba(249,115,22,.06)",
+              background: "rgba(249,115,22,.05)",
             },
           },
         },
@@ -223,7 +202,12 @@ export const getTheme = (mode: "light" | "dark") =>
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            borderRadius: 14,
+            borderRadius: 12,
+
+            background:
+              mode === "light"
+                ? "#FFFFFF"
+                : "#1B1715",
 
             "&:hover .MuiOutlinedInput-notchedOutline": {
               borderColor: "#F97316",
@@ -250,7 +234,7 @@ export const getTheme = (mode: "light" | "dark") =>
               "linear-gradient(90deg,#F97316,#F59E0B)",
 
             "& .MuiTableCell-root": {
-              color: "#FFFFFF",
+              color: "#FFF",
               fontWeight: 700,
               borderBottom: 0,
             },
@@ -261,22 +245,8 @@ export const getTheme = (mode: "light" | "dark") =>
       MuiChip: {
         styleOverrides: {
           root: {
+            borderRadius: 8,
             fontWeight: 600,
-            borderRadius: 10,
-          },
-
-          filledPrimary: {
-            background:
-              "linear-gradient(135deg,#F97316,#FB923C)",
-
-            color: "#FFF",
-          },
-
-          filledSecondary: {
-            background:
-              "linear-gradient(135deg,#F59E0B,#FBBF24)",
-
-            color: "#2A211C",
           },
         },
       },
@@ -286,7 +256,7 @@ export const getTheme = (mode: "light" | "dark") =>
           root: {
             borderColor:
               mode === "light"
-                ? "#F1D9C7"
+                ? "#E8D6C8"
                 : "#30251F",
           },
         },
@@ -311,6 +281,7 @@ export const getTheme = (mode: "light" | "dark") =>
           root: {
             background:
               "linear-gradient(135deg,#F97316,#FBBF24)",
+
             color: "#FFF",
             fontWeight: 700,
           },
@@ -346,5 +317,7 @@ export const getTheme = (mode: "light" | "dark") =>
           },
         },
       },
+
+      
     },
   });

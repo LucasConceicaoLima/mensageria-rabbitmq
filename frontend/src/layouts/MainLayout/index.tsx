@@ -168,11 +168,11 @@ export const MainLayout: React.FC = () => {
             </IconButton>
           )}
 
-          <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
+          <Typography variant="h6" sx={{ flexGrow: 1, color: '#FFF' }} noWrap>
             RabbitMQ Order Processing
           </Typography>
 
-          <IconButton color="inherit" onClick={toggleTheme}>
+          <IconButton onClick={toggleTheme}>
             {mode === "dark" ? <LightMode /> : <DarkMode />}
           </IconButton>
         </Toolbar>
