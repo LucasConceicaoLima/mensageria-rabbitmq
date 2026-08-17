@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
+
 import {
   Box,
+  Chip,
   Grid,
+  Stack,
   Typography,
 } from "@mui/material";
 
@@ -37,25 +40,61 @@ export default function OrderDetailsPage() {
     );
   }
 
+  const chipColor =
+    order?.status === "APPROVED"
+      ? "success"
+      : order?.status === "REJECTED"
+      ? "error"
+      : order?.status ===
+        "PROCESSING_PAYMENT"
+      ? "warning"
+      : "default";
+
   return (
     <Box>
-      <Typography
-        variant="h4"
-        mb={3}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
       >
-        Order Details
-      </Typography>
+        <Box>
+          <Typography variant="h4">
+            {isLoading
+              ? "Order"
+              : `Order #${order!.id
+                  .slice(-8)
+                  .toUpperCase()}`}
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            mt={0.5}
+          >
+            Monitor every stage of this
+            order processing.
+          </Typography>
+        </Box>
+
+        {!isLoading && (
+          <Chip
+            label={order!.status}
+            color={chipColor}
+            sx={{
+              px: 1,
+              fontWeight: 700,
+            }}
+          />
+        )}
+      </Stack>
 
       <Grid container spacing={3}>
-        <Grid size={8}>
-          {isLoading ? (
-            <OrderItemTableSkeleton />
-          ) : (
-            <OrderItemTable order={order!} />
-          )}
-        </Grid>
-
-        <Grid size={4}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 4,
+          }}
+        >
           {isLoading ? (
             <OrderInfoSkeleton />
           ) : (
@@ -63,11 +102,28 @@ export default function OrderDetailsPage() {
           )}
         </Grid>
 
-        <Grid size={12}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 8,
+          }}
+        >
           {isLoading ? (
             <OrderTimelineSkeleton />
           ) : (
-            <OrderTimeline events={events} />
+            <OrderTimeline
+              events={events}
+            />
+          )}
+        </Grid>
+
+        <Grid size={12}>
+          {isLoading ? (
+            <OrderItemTableSkeleton />
+          ) : (
+            <OrderItemTable
+              order={order!}
+            />
           )}
         </Grid>
       </Grid>

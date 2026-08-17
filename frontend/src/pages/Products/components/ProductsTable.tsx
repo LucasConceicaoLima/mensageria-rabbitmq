@@ -97,12 +97,12 @@ export const ProductsTable = ({
                     handleSort("name")
                   }
                 >
-                  Name
+                  Nome
                 </TableSortLabel>
               </TableCell>
 
               <TableCell>
-                Description
+                Descrição
               </TableCell>
 
               <TableCell>
@@ -113,7 +113,7 @@ export const ProductsTable = ({
                     handleSort("price")
                   }
                 >
-                  Price
+                  Preço
                 </TableSortLabel>
               </TableCell>
 
@@ -125,7 +125,7 @@ export const ProductsTable = ({
                     handleSort("stock")
                   }
                 >
-                  Stock
+                  Estoque
                 </TableSortLabel>
               </TableCell>
 
@@ -133,7 +133,7 @@ export const ProductsTable = ({
                 width={120}
                 align="center"
               >
-                Actions
+                Ações
               </TableCell>
             </TableRow>
           </TableHead>
@@ -204,6 +204,10 @@ export const ProductsTable = ({
           setPage(0);
         }}
         rowsPerPageOptions={[10, 25, 50]}
+        labelRowsPerPage="Linhas por página:"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`
+        }
       />
     </Paper>
   );

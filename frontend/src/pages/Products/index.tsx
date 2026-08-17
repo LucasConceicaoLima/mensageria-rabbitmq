@@ -186,8 +186,9 @@ const ProductsPage = () => {
       <Paper
         elevation={5}
         sx={{
-          p: 3,
-          borderRadius: 3,
+          m: 3,
+          p: 5,
+          borderRadius: 5,
         }}
       >
         <Box
@@ -201,7 +202,7 @@ const ProductsPage = () => {
             variant="h4"
             fontWeight={600}
           >
-            Products
+            Produtos
           </Typography>
 
           <Button
@@ -209,7 +210,7 @@ const ProductsPage = () => {
             startIcon={<AddIcon />}
             onClick={handleCreate}
           >
-            New Product
+            Novo Produto
           </Button>
         </Box>
 
@@ -217,7 +218,7 @@ const ProductsPage = () => {
           <TextField
             fullWidth
             size="small"
-            placeholder="Search products..."
+            placeholder="Pesquisar produtos..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -243,15 +244,15 @@ const ProductsPage = () => {
             gap={2}
           >
             <Typography variant="h6">
-              No products found
+              Nenhum produto encontrado
             </Typography>
 
             <Typography
               color="text.secondary"
               textAlign="center"
             >
-              Create your first product to start
-              receiving orders.
+              Crie seu primeiro produto para começar
+              a receber pedidos.
             </Typography>
           </Box>
         ) : filteredProducts.length === 0 ? (
@@ -264,14 +265,14 @@ const ProductsPage = () => {
             gap={2}
           >
             <Typography variant="h6">
-              No products match your search
+              Nenhum produto encontrado
             </Typography>
 
             <Typography
               color="text.secondary"
               textAlign="center"
             >
-              Try searching with a different name.
+              Tente pesquisar com um nome diferente.
             </Typography>
           </Box>
         ) : (

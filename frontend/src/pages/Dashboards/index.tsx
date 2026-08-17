@@ -1,8 +1,20 @@
 import {
+  Box,
+  Button,
   Grid,
   Stack,
   Typography,
+  useTheme,
+  Switch
 } from "@mui/material";
+
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 import { useDashboard } from "../../hooks/useDashboard";
 
@@ -24,59 +36,115 @@ import { LatestOrdersSkeleton } from "./components/LatestOrdersSkeleton";
 import { TopProducts } from "./components/TopProducts";
 import { TopProductsSkeleton } from "./components/TopProductsSkeleton";
 
+import { useState } from "react";
+
 export default function Dashboard() {
+  const theme = useTheme();
+
   const {
     data: dashboard,
     isLoading,
+    isError,
+    refetch,
   } = useDashboard();
 
-  if (isLoading) {
+  const [shouldShowSkeleton, setShouldShowSkeleton] = useState(false);
+
+  if (isLoading || shouldShowSkeleton) {
     return (
-      <Stack spacing={4}>
-        <Grid container spacing={3}>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Grid
-              key={index}
-              size={{ xs: 12, md: 3 }}
-            >
-              <DashboardCardSkeleton />
+      <Box sx={{ m: 3 }}>
+        <Stack spacing={4}>
+          <Grid container spacing={3}>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Grid
+                key={index}
+                size={{ xs: 12, md: 3 }}
+              >
+                <DashboardCardSkeleton />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Grid container spacing={3}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <Grid
+                key={index}
+                size={{ xs: 12, md: 4 }}
+              >
+                <DashboardCardSkeleton />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, lg: 5 }}>
+              <OrderStatusChartSkeleton />
             </Grid>
-          ))}
-        </Grid>
 
-        <Grid container spacing={3}>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Grid
-              key={index}
-              size={{ xs: 12, md: 4 }}
-            >
-              <DashboardCardSkeleton />
+            <Grid size={{ xs: 12, lg: 7 }}>
+              <RevenueTimelineSkeleton />
             </Grid>
-          ))}
-        </Grid>
-
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, lg: 5 }}>
-            <OrderStatusChartSkeleton />
           </Grid>
 
-          <Grid size={{ xs: 12, lg: 7 }}>
-            <RevenueTimelineSkeleton />
-          </Grid>
-        </Grid>
+          <OrdersTimelineSkeleton />
 
-        <OrdersTimelineSkeleton />
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <LatestOrdersSkeleton />
+            </Grid>
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <LatestOrdersSkeleton />
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TopProductsSkeleton />
+            </Grid>
           </Grid>
+          <Switch
+            checked={shouldShowSkeleton}
+            onChange={(event) => setShouldShowSkeleton(event.target.checked)}
+          />
+        </Stack>
+      </Box>
+    );
+  }
 
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TopProductsSkeleton />
-          </Grid>
-        </Grid>
-      </Stack>
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+        }}
+      >
+        <Stack
+          spacing={2}
+          alignItems="center"
+          textAlign="center"
+        >
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
+            Não foi possível carregar o dashboard
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            Ocorreu um erro ao buscar os dados.
+            Tente novamente.
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={() => refetch()}
+          >
+            Tentar novamente
+          </Button>
+        </Stack>
+      </Box>
     );
   }
 
@@ -85,119 +153,119 @@ export default function Dashboard() {
   }
 
   return (
-    <Stack spacing={4}>
-      <Stack>
-        <Typography variant="h4">
-          Dashboard
-        </Typography>
+    <Box sx={{ m: 3 }}>
+      <Stack spacing={4}>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 3 }}>
+            <DashboardCard
+              title="Pedidos"
+              value={dashboard.kpis.totalOrders}
+              color={theme.palette.primary.main}
+              icon={<ShoppingCartIcon />}
+            />
+          </Grid>
 
-        <Typography color="text.secondary">
-          Monitor the asynchronous order processing pipeline.
-        </Typography>
+          <Grid size={{ xs: 12, md: 3 }}>
+            <DashboardCard
+              title="Receita"
+              value={dashboard.kpis.totalRevenue}
+              color={theme.palette.success.main}
+              currency
+              icon={<PaymentsIcon />}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 3 }}>
+            <DashboardCard
+              title="Ticket Médio"
+              value={dashboard.kpis.averageTicket}
+              color={theme.palette.warning.main}
+              currency
+              icon={<ReceiptLongIcon />}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 3 }}>
+            <DashboardCard
+              title="Produtos Vendidos"
+              value={dashboard.kpis.productsSold}
+              color={theme.palette.error.main}
+              icon={<Inventory2Icon />}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <DashboardCard
+              title="Taxa de Aprovação"
+              value={dashboard.kpis.approvalRate}
+              color={theme.palette.success.main}
+              suffix="%"
+              icon={<CheckCircleIcon />}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <DashboardCard
+              title="Taxa de Rejeição"
+              value={dashboard.kpis.rejectionRate}
+              color={theme.palette.error.main}
+              suffix="%"
+              icon={<CancelIcon />}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <DashboardCard
+              title="Tempo Médio de Processamento"
+              value={dashboard.kpis.averageProcessingTime}
+              color={theme.palette.secondary.main}
+              suffix=" min"
+              icon={<ScheduleIcon />}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, lg: 5 }}>
+            <OrderStatusChart
+              pending={dashboard.status.pending}
+              processing={dashboard.status.processing}
+              approved={dashboard.status.approved}
+              rejected={dashboard.status.rejected}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, lg: 7 }}>
+            <RevenueTimeline
+              data={dashboard.revenuePerDay}
+            />
+          </Grid>
+        </Grid>
+
+        <OrdersTimeline
+          data={dashboard.ordersPerDay}
+        />
+
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <LatestOrders
+              orders={dashboard.latestOrders}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TopProducts
+              products={dashboard.topProducts}
+            />
+          </Grid>
+        </Grid>
+        <Switch
+          checked={shouldShowSkeleton}
+          onChange={(event) => setShouldShowSkeleton(event.target.checked)}
+          />
       </Stack>
-
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 3 }}>
-          <DashboardCard
-            title="Orders"
-            value={dashboard.kpis.totalOrders}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          <DashboardCard
-            title="Revenue"
-            value={dashboard.kpis.totalRevenue}
-            color="success.main"
-            currency
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          <DashboardCard
-            title="Average Ticket"
-            value={dashboard.kpis.averageTicket}
-            color="warning.main"
-            currency
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 3 }}>
-          <DashboardCard
-            title="Products Sold"
-            value={dashboard.kpis.productsSold}
-            color="info.main"
-          />
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            title="Approval Rate"
-            value={dashboard.kpis.approvalRate}
-            color="success.main"
-            suffix="%"
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            title="Rejection Rate"
-            value={dashboard.kpis.rejectionRate}
-            color="error.main"
-            suffix="%"
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            title="Avg Processing"
-            value={
-              dashboard.kpis.averageProcessingTime
-            }
-            color="secondary.main"
-            suffix=" min"
-          />
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, lg: 5 }}>
-          <OrderStatusChart
-            pending={dashboard.status.pending}
-            processing={
-              dashboard.status.processing
-            }
-            approved={dashboard.status.approved}
-            rejected={dashboard.status.rejected}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, lg: 7 }}>
-          <RevenueTimeline
-            data={dashboard.revenuePerDay}
-          />
-        </Grid>
-      </Grid>
-
-      <OrdersTimeline
-        data={dashboard.ordersPerDay}
-      />
-
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <LatestOrders
-            orders={dashboard.latestOrders}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TopProducts
-            products={dashboard.topProducts}
-          />
-        </Grid>
-      </Grid>
-    </Stack>
+    </Box>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   AppBar,
   Box,
@@ -16,13 +16,8 @@ import {
   useTheme,
 } from "@mui/material";
 
-import {
-  Menu,
-  DarkMode,
-  LightMode,
-} from "@mui/icons-material";
-
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { DarkMode, LightMode, Menu } from "@mui/icons-material";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { ThemeContext } from "../../theme/ThemeContext";
 import { routesConfig } from "../../routes/routes.config";
@@ -40,22 +35,31 @@ export const MainLayout: React.FC = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+  const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
 
   const isActive = (itemPath: string) => {
-    const current = location.pathname.split("/");
-    const target = itemPath.split("/");
+    const allPaths = routesConfig.map((route) => route.path);
 
-    return (
-      current.length === target.length &&
-      current.every((segment, index) => segment === target[index])
+    const matchingPaths = allPaths.filter(
+      (path) =>
+        location.pathname === path ||
+        location.pathname.startsWith(path + "/"),
     );
+
+    const activePath = matchingPaths.sort(
+      (a, b) => b.length - a.length,
+    )[0];
+
+    return activePath === itemPath;
   };
 
   const managementRoutes = routesConfig.filter(
     (r) => r.section === "management",
   );
-  const resultRoutes = routesConfig.filter((r) => r.section === "results");
+
+  const resultRoutes = routesConfig.filter(
+    (r) => r.section === "results",
+  );
 
   const drawerContent = (
     <Box>
@@ -72,7 +76,7 @@ export const MainLayout: React.FC = () => {
               py: 1,
             }}
           >
-            Management
+            Gerenciamento
           </Typography>
         </ListItem>
 
@@ -82,8 +86,8 @@ export const MainLayout: React.FC = () => {
           return (
             <ListItem disablePadding key={path}>
               <ListItemButton
-                onClick={() => navigate(path)}
                 selected={selected}
+                onClick={() => navigate(path)}
                 sx={{
                   "&.Mui-selected": {
                     backgroundColor: theme.palette.primary.main,
@@ -95,6 +99,7 @@ export const MainLayout: React.FC = () => {
                 }}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
+
                 <ListItemText primary={label} />
               </ListItemButton>
             </ListItem>
@@ -123,8 +128,8 @@ export const MainLayout: React.FC = () => {
           return (
             <ListItem disablePadding key={path}>
               <ListItemButton
-                onClick={() => navigate(path)}
                 selected={selected}
+                onClick={() => navigate(path)}
                 sx={{
                   "&.Mui-selected": {
                     backgroundColor: theme.palette.primary.main,
@@ -136,6 +141,7 @@ export const MainLayout: React.FC = () => {
                 }}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
+
                 <ListItemText primary={label} />
               </ListItemButton>
             </ListItem>
@@ -159,8 +165,8 @@ export const MainLayout: React.FC = () => {
         <Toolbar>
           {isMobile && (
             <IconButton
-              color="inherit"
               edge="start"
+              color="inherit"
               onClick={handleDrawerToggle}
               sx={{ mr: 2 }}
             >
@@ -168,11 +174,18 @@ export const MainLayout: React.FC = () => {
             </IconButton>
           )}
 
-          <Typography variant="h6" sx={{ flexGrow: 1, color: '#FFF' }} noWrap>
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{
+              flexGrow: 1,
+              color: "#FFF",
+            }}
+          >
             RabbitMQ Order Processing
           </Typography>
 
-          <IconButton onClick={toggleTheme}>
+          <IconButton color="inherit" onClick={toggleTheme}>
             {mode === "dark" ? <LightMode /> : <DarkMode />}
           </IconButton>
         </Toolbar>
@@ -182,8 +195,13 @@ export const MainLayout: React.FC = () => {
         variant={isMobile ? "temporary" : "permanent"}
         open={isMobile ? mobileOpen : true}
         onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
+        ModalProps={{
+          keepMounted: true,
+        }}
         sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
@@ -197,9 +215,7 @@ export const MainLayout: React.FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          p: 1,
         }}
       >
         <Toolbar />

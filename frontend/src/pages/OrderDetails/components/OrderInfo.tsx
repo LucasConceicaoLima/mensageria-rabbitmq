@@ -7,7 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import UpdateIcon from "@mui/icons-material/Update";
+
 import type { OrderResponse } from "../../../types/OrderResponse";
+
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 import { formatDateBr } from "../../../utils/formatDateBr";
 import { getStatusColor } from "../../../utils/getStatusColor";
@@ -16,36 +22,45 @@ interface Props {
   order: OrderResponse;
 }
 
-export const OrderInfo = ({
-  order,
-}: Props) => {
+export const OrderInfo = ({ order }: Props) => {
   return (
-    <Card>
+    <Card
+      elevation={3}
+      sx={{
+        borderRadius: 3,
+        height: "100%",
+      }}
+    >
       <CardContent>
         <Typography
           variant="h6"
           gutterBottom
         >
-          Order Information
+          Order Summary
         </Typography>
 
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
 
-        <Stack spacing={2}>
-          <div>
+        <Stack spacing={3}>
+          <Stack spacing={0.5}>
             <Typography
               variant="caption"
               color="text.secondary"
             >
-              Order ID
+              Order
             </Typography>
 
-            <Typography variant="body2">
-              {order.id}
+            <Typography
+              fontWeight={700}
+            >
+              #
+              {order.id
+                .slice(-8)
+                .toUpperCase()}
             </Typography>
-          </div>
+          </Stack>
 
-          <div>
+          <Stack spacing={0.5}>
             <Typography
               variant="caption"
               color="text.secondary"
@@ -53,54 +68,120 @@ export const OrderInfo = ({
               Status
             </Typography>
 
-            <br />
-
             <Chip
-              label={order.status}
+              label={order.status.replaceAll(
+                "_",
+                " ",
+              )}
               color={getStatusColor(
                 order.status,
               )}
+              sx={{
+                width: "fit-content",
+              }}
             />
-          </div>
+          </Stack>
 
-          <div>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-            >
-              Total
-            </Typography>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+          >
+            <PaymentsIcon
+              color="success"
+            />
 
-            <Typography variant="h5">
-              {formatCurrencyBrl(order.total)}
-            </Typography>
-          </div>
+            <Stack>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+              >
+                Total
+              </Typography>
 
-          <div>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-            >
-              Created
-            </Typography>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+              >
+                {formatCurrencyBrl(
+                  order.total,
+                )}
+              </Typography>
+            </Stack>
+          </Stack>
 
-            <Typography>
-              {formatDateBr(order.createdAt)}
-            </Typography>
-          </div>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+          >
+            <ShoppingCartIcon
+              color="primary"
+            />
 
-          <div>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-            >
-              Updated
-            </Typography>
+            <Stack>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+              >
+                Items
+              </Typography>
 
-            <Typography>
-              {formatDateBr(order.updatedAt)}
-            </Typography>
-          </div>
+              <Typography>
+                {order.items.length}
+              </Typography>
+            </Stack>
+          </Stack>
+
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+          >
+            <CalendarTodayIcon
+              color="action"
+            />
+
+            <Stack>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+              >
+                Created
+              </Typography>
+
+              <Typography>
+                {formatDateBr(
+                  order.createdAt,
+                )}
+              </Typography>
+            </Stack>
+          </Stack>
+
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+          >
+            <UpdateIcon
+              color="action"
+            />
+
+            <Stack>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+              >
+                Updated
+              </Typography>
+
+              <Typography>
+                {formatDateBr(
+                  order.updatedAt,
+                )}
+              </Typography>
+            </Stack>
+          </Stack>
         </Stack>
       </CardContent>
     </Card>

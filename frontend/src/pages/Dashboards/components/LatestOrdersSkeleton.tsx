@@ -7,6 +7,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Box,
 } from "@mui/material";
 
 export const LatestOrdersSkeleton = () => {
@@ -17,31 +18,63 @@ export const LatestOrdersSkeleton = () => {
         borderRadius: 3,
       }}
     >
-      <CardContent>
-        <Skeleton
-          variant="text"
-          width="35%"
-          height={32}
-          sx={{ mb: 1 }}
-        />
+      <CardContent
+        sx={{
+          m: 2,
+          p: 0,
+          "&:last-child": {
+            pb: 0,
+          },
+        }}
+      >
+        <Box sx={{ mb: 2 }}>
+          <Skeleton
+            variant="text"
+            width={160}
+            height={32}
+          />
+
+          <Skeleton
+            variant="text"
+            width={150}
+            height={24}
+            sx={{ mt: 0.3 }}
+          />
+        </Box>
 
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
-                <Skeleton width={70} />
+                <Skeleton
+                  variant="text"
+                  width={60}
+                  height={24}
+                />
               </TableCell>
 
               <TableCell>
-                <Skeleton width={70} />
+                <Skeleton
+                  variant="text"
+                  width={55}
+                  height={24}
+                />
               </TableCell>
 
               <TableCell>
-                <Skeleton width={70} />
+                <Skeleton
+                  variant="text"
+                  width={45}
+                  height={24}
+                />
               </TableCell>
 
               <TableCell>
-                <Skeleton width={100} />
+                <Skeleton
+                  variant="text"
+                  width={70}
+                  height={24}
+                />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -50,23 +83,35 @@ export const LatestOrdersSkeleton = () => {
             {Array.from({ length: 5 }).map((_, index) => (
               <TableRow key={index}>
                 <TableCell>
-                  <Skeleton width={80} />
-                </TableCell>
-
-                <TableCell>
                   <Skeleton
-                    variant="rounded"
-                    width={90}
+                    variant="text"
+                    width={75}
                     height={24}
                   />
                 </TableCell>
 
                 <TableCell>
-                  <Skeleton width={80} />
+                  <Skeleton
+                    variant="rounded"
+                    width={85}
+                    height={24}
+                  />
                 </TableCell>
 
                 <TableCell>
-                  <Skeleton width={120} />
+                  <Skeleton
+                    variant="text"
+                    width={75}
+                    height={24}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <Skeleton
+                    variant="text"
+                    width={110}
+                    height={24}
+                  />
                 </TableCell>
               </TableRow>
             ))}

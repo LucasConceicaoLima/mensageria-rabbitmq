@@ -1,8 +1,8 @@
 import {
   Card,
   CardContent,
-  Box,
   Skeleton,
+  Box,
 } from "@mui/material";
 
 export const OrderStatusChartSkeleton = () => {
@@ -14,17 +14,37 @@ export const OrderStatusChartSkeleton = () => {
         borderRadius: 3,
       }}
     >
-      <CardContent>
-        <Skeleton
-          variant="text"
-          width="45%"
-          height={32}
-        />
+      <CardContent
+        sx={{
+          m: 2,
+          p: 0,
+          "&:last-child": {
+            pb: 0,
+          },
+        }}
+      >
+        <Box sx={{ mb: 1 }}>
+          <Skeleton
+            variant="text"
+            width={100}
+            height={32}
+          />
+
+          <Skeleton
+            variant="text"
+            width={180}
+            height={24}
+            sx={{ mt: 0.3 }}
+          />
+        </Box>
 
         <Box
-          display="flex"
-          justifyContent="center"
-          mt={2}
+          sx={{
+            height: 320,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Skeleton
             variant="circular"

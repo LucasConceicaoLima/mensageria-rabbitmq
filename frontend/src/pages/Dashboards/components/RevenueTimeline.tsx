@@ -2,20 +2,23 @@ import {
   Card,
   CardContent,
   Typography,
+  Box,
+  useTheme,
 } from "@mui/material";
-
-import { LineChart } from "@mui/x-charts/LineChart";
-
+import { BarChart } from "@mui/x-charts/BarChart";
 import type { RevenueTimeline } from "../../../types/dashboard/RevenueTimeline";
-import { formatCurrencyBrlCompact } from "../../../utils/formatCurrencyBrlCompact";
 
 interface Props {
   data: RevenueTimeline[];
 }
 
-export function RevenueTimeline({
-  data,
-}: Props) {
+export function RevenueTimeline({ data }: Props) {
+  const theme = useTheme();
+
+  const labels = data.map((item) =>
+    new Date(item.date).toLocaleDateString("pt-BR")
+  );
+
   return (
     <Card
       elevation={3}
@@ -24,38 +27,83 @@ export function RevenueTimeline({
         borderRadius: 3,
       }}
     >
-      <CardContent>
-        <Typography
-          variant="h6"
-          gutterBottom
-        >
-          Revenue Timeline
-        </Typography>
+      <CardContent
+        sx={{
+          m: 2,
+          p: 0,
+          "&:last-child": {
+            pb: 0,
+          },
+        }}
+      >
+        <Box sx={{ mb: 1 }}>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            sx={{
+              color: theme.palette.text.primary,
+              letterSpacing: "-0.3px",
+            }}
+          >
+            Receita
+          </Typography>
 
-        <LineChart
-          height={320}
-          xAxis={[
-            {
-              scaleType: "point",
-              data: data.map((item) => item.date),
-            },
-          ]}
-          yAxis={[
-            {
-              valueFormatter: (value: number) =>
-                formatCurrencyBrlCompact(value),
-            },
-          ]}
-          series={[
-            {
-              label: "Revenue",
-              data: data.map(
-                (item) => item.revenue,
-              ),
-              area: true,
-            },
-          ]}
-        />
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+              mt: 0.3,
+            }}
+          >
+            Receita ao longo do período
+          </Typography>
+        </Box>
+
+        <BarChart
+  height={320}
+  grid={{
+    vertical: false,
+    horizontal: true,
+  }}
+  xAxis={[
+    {
+      scaleType: "band",
+      data: labels,
+      categoryGapRatio: 0.75,
+    },
+  ]}
+  yAxis={[
+    
+    {
+      width: 75,
+      valueFormatter: (value: number) =>
+        `R$ ${value.toLocaleString("pt-BR")}`,
+    },
+  ]}
+  series={[
+    {
+      label: "Receita",
+      data: data.map((item) => item.revenue),
+      color: theme.palette.primary.main,
+      valueFormatter: (value) =>
+        value !== null
+          ? `R$ ${value.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`
+          : "",
+    },
+  ]}
+  borderRadius={6}
+  sx={{
+    "& .MuiChartsSurface-root": {
+      overflow: "visible",
+    },
+    "& svg": {
+      overflow: "visible",
+    },
+  }}
+/>
       </CardContent>
     </Card>
   );

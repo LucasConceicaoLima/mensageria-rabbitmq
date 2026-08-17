@@ -44,6 +44,7 @@ export const ProductFormDialog = ({
           initialValues={product}
           loading={loading}
           onSubmit={onSubmit}
+          onCancel={onClose}
         />
       </DialogContent>
     </Dialog>

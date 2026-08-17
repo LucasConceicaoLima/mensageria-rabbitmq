@@ -1,10 +1,19 @@
-import { Box, Button, Stack, TextField,} from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CurrencyField } from "../../../components/CurrencyField";
 import type { Product } from "../../../types/Product";
 import type { CreateProductDto } from "../../../types/dto/CreateProductDto";
-import { productFormSchema, type ProductFormData } from "./productForm.schema";
+import {
+  productFormSchema,
+  type ProductFormData,
+} from "./productForm.schema";
 
 interface Props {
   initialValues?: Product;
@@ -12,17 +21,20 @@ interface Props {
   onSubmit: (
     values: CreateProductDto,
   ) => void;
+  onCancel: () => void;
 }
 
 export const ProductForm = ({
   initialValues,
   loading,
   onSubmit,
+  onCancel,
 }: Props) => {
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -57,12 +69,14 @@ export const ProductForm = ({
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit((values) => onSubmit(values as CreateProductDto))}
+      onSubmit={handleSubmit((values) =>
+        onSubmit(values as CreateProductDto),
+      )}
       sx={{ mt: 2 }}
     >
       <Stack spacing={2}>
         <TextField
-          label="Name"
+          label="Nome"
           fullWidth
           {...register("name")}
           error={!!errors.name}
@@ -70,29 +84,24 @@ export const ProductForm = ({
         />
 
         <TextField
-          label="Description"
+          label="Descrição"
           multiline
           rows={3}
           fullWidth
           {...register("description")}
           error={!!errors.description}
-          helperText={
-            errors.description?.message
-          }
+          helperText={errors.description?.message}
+        />
+
+        <CurrencyField<ProductFormData>
+          name="price"
+          control={control}
+          label="Preço"
+          fullWidth
         />
 
         <TextField
-          label="Price"
-          type="number"
-          {...register("price", {
-            valueAsNumber: true,
-          })}
-          error={!!errors.price}
-          helperText={errors.price?.message}
-        />
-
-        <TextField
-          label="Stock"
+          label="Estoque"
           type="number"
           {...register("stock", {
             valueAsNumber: true,
@@ -101,13 +110,28 @@ export const ProductForm = ({
           helperText={errors.stock?.message}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={loading}
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          spacing={2}
         >
-          {loading ? "Saving..." : "Save"}
-        </Button>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={onCancel}
+            disabled={loading}
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            loading={loading}
+          >
+            Salvar
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );

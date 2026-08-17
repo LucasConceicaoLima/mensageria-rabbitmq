@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardContent,
   Chip,
@@ -8,11 +9,12 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
-
+import { translateOrderStatus } from "../../../utils/translateOrderStatus";
 import { useNavigate } from "react-router-dom";
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
-import { formatDateBr } from "../../../utils/formatDateBr";
+import { formatTimestampBr } from "../../../utils/formatTimestampBr";
 import { getStatusColor } from "../../../utils/getStatusColor";
 
 import type { LatestOrders as Latest } from "../../../types/dashboard/LatestOrders";
@@ -21,34 +23,88 @@ interface Props {
   orders: Latest[];
 }
 
-export const LatestOrders = ({
-  orders,
-}: Props) => {
+export const LatestOrders = ({ orders }: Props) => {
   const navigate = useNavigate();
-
+  const theme = useTheme();
 
   return (
     <Card
       elevation={3}
       sx={{
         borderRadius: 3,
+        backgroundColor: theme.palette.background.paper,
       }}
     >
-      <CardContent>
-        <Typography
-          variant="h6"
-          gutterBottom
-        >
-          Latest Orders
-        </Typography>
+      <CardContent
+        sx={{
+          m: 2,
+          p: 0,
+          "&:last-child": {
+            pb: 0,
+          },
+        }}
+      >
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            sx={{
+              color: theme.palette.text.primary,
+              letterSpacing: "-0.3px",
+            }}
+          >
+            Últimos Pedidos
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+              mt: 0.3,
+            }}
+          >
+            Pedidos mais recentes
+          </Typography>
+        </Box>
 
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Order</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Total</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                Pedido
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                Status
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                Total
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                Data
+              </TableCell>
             </TableRow>
           </TableHead>
 
@@ -59,27 +115,29 @@ export const LatestOrders = ({
                 hover
                 sx={{
                   cursor: "pointer",
+                  "&:last-child td": {
+                    borderBottom: 0,
+                  },
                 }}
-                onClick={() =>
-                  navigate(
-                    `/orders/${order.id}`,
-                  )
-                }
+                onClick={() => navigate(`/orders/${order.id}`)}
               >
                 <TableCell>
-                  #{order.id.slice(-8)}
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                  >
+                    #{order.id.slice(-8)}
+                  </Typography>
                 </TableCell>
 
                 <TableCell>
                   <Chip
-                    label={order.status.replaceAll(
-                      "_",
-                      " ",
-                    )}
-                    color={getStatusColor(
-                      order.status,
-                    )}
+                    label={translateOrderStatus(order.status)}
+                    color={getStatusColor(order.status)}
                     size="small"
+                    sx={{
+                      fontWeight: 500,
+                    }}
                   />
                 </TableCell>
 
@@ -88,7 +146,7 @@ export const LatestOrders = ({
                 </TableCell>
 
                 <TableCell>
-                  {formatDateBr(order.createdAt)}
+                  {formatTimestampBr(order.createdAt)}
                 </TableCell>
               </TableRow>
             ))}
@@ -98,8 +156,15 @@ export const LatestOrders = ({
                 <TableCell
                   align="center"
                   colSpan={4}
+                  sx={{
+                    py: 5,
+                    color: theme.palette.text.secondary,
+                    borderBottom: 0,
+                  }}
                 >
-                  No orders found.
+                  <Typography variant="body2">
+                    Nenhum pedido encontrado.
+                  </Typography>
                 </TableCell>
               </TableRow>
             )}

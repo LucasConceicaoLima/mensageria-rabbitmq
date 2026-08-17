@@ -4,21 +4,21 @@ export const productFormSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(3, "Name must have at least 3 characters"),
+    .min(3, "Nome deve possuir pelo menos 3 caracteres"),
 
   description: z
     .string()
     .trim()
-    .min(5, "Description must have at least 5 characters"),
+    .min(5, "Descrição deve possuir pelo menos 5 caracteres"),
 
   price: z.coerce
     .number()
-    .min(0.01, "Price must be greater than 0"),
+    .min(0.01, "Preço deve ser maior que 0"),
 
   stock: z.coerce
     .number()
-    .int("Stock must be an integer")
-    .min(0, "Stock cannot be negative"),
+    .int("Estoque deve ser um número inteiro")
+    .min(0, "Estoque não pode ser negativo ou zero"),
 });
 
 export type ProductFormData = z.input<typeof productFormSchema>;
