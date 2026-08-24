@@ -81,12 +81,17 @@ Atualização do Pedido
 ### Dashboard
 
 * Total de pedidos
-* Pedidos pendentes
-* Pedidos aprovados
-* Pedidos rejeitados
-* Gráfico de pedidos por status
-* Gráfico de receita por status
-* Últimos pedidos processados
+* Receita
+* Ticket Médio
+* Produtos Vendidos
+* Taxa de Aprovação
+* Taxa de Rejeição
+* Tempo Médio de Processamento
+* Pedidos - Distribuição por status
+* Pedidos - Pedidos ao longo do período
+* Receita - Receita ao longo do período
+* Últimos Pedidos
+* Produtos mais vendidos
 
 ### UX
 
@@ -272,15 +277,12 @@ Este projeto foi utilizado para praticar:
 * Componentização com Material UI
 * Docker e Docker Compose
 * Boas práticas de organização de código
+* Lint
 
 ---
 
 ## Melhorias Futuras
 
-* Filtros por status
-* Busca de produtos
-* Paginação
-* Ordenação de tabelas
 * Testes automatizados
 * Autenticação JWT
 * Deploy em nuvem
