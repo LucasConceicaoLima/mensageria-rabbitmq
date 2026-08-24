@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
-  Alert,
   Box,
   Button,
   InputAdornment,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -32,6 +32,7 @@ const ProductsPage = () => {
     data: products = [],
     isLoading,
     isError,
+    refetch,
   } = useProducts();
 
   const createMutation = useCreateProduct();
@@ -88,14 +89,14 @@ const ProductsPage = () => {
         });
 
         showSnackbar(
-          "Product updated successfully!",
+          "Produto atualizado com sucesso!",
           "success",
         );
       } else {
         await createMutation.mutateAsync(dto);
 
         showSnackbar(
-          "Product created successfully!",
+          "Produto criado com sucesso!",
           "success",
         );
       }
@@ -122,7 +123,7 @@ const ProductsPage = () => {
         );
 
         showSnackbar(
-          "Product deleted successfully!",
+          "Produto excluído com sucesso!",
           "success",
         );
 
@@ -141,8 +142,9 @@ const ProductsPage = () => {
       <Paper
         elevation={5}
         sx={{
-          p: 3,
-          borderRadius: 3,
+          m: 3,
+          p: 5,
+          borderRadius: 5,
         }}
       >
         <Box
@@ -175,9 +177,43 @@ const ProductsPage = () => {
 
   if (isError) {
     return (
-      <Alert severity="error">
-        Error loading products.
-      </Alert>
+      <Box
+        sx={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+        }}
+      >
+        <Stack
+          spacing={2}
+          alignItems="center"
+          textAlign="center"
+        >
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
+            Não foi possível carregar os produtos
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            Ocorreu um erro ao buscar os dados.
+            Tente novamente.
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={() => refetch()}
+          >
+            Tentar novamente
+          </Button>
+        </Stack>
+      </Box>
     );
   }
 
@@ -218,7 +254,6 @@ const ProductsPage = () => {
           <TextField
             fullWidth
             size="small"
-            placeholder="Pesquisar produtos..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -288,8 +323,8 @@ const ProductsPage = () => {
         open={formOpen}
         title={
           selectedProduct
-            ? "Edit Product"
-            : "New Product"
+            ? "Editar Produto"
+            : "Novo Produto"
         }
         product={selectedProduct}
         loading={

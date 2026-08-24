@@ -20,28 +20,34 @@ export const OrderItemTable = ({
   order,
 }: Props) => {
   return (
-    <Card>
+    <Card
+      elevation={5}
+      sx={{
+        borderRadius: 3,
+        p: 3,
+      }}
+    >
       <CardContent>
         <Typography
           variant="h6"
           gutterBottom
         >
-          Order Items
+          Itens do pedido
         </Typography>
 
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
-                Product
+                Produto
               </TableCell>
 
               <TableCell>
-                Quantity
+                Quantidade
               </TableCell>
 
               <TableCell>
-                Unit Price
+                Preço unitário
               </TableCell>
 
               <TableCell>

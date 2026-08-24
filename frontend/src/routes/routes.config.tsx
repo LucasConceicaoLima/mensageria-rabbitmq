@@ -40,21 +40,21 @@ const CreateOrderPage = lazy(
 export const routesConfig: RouteConfig[] = [
   {
     path: "/products",
-    label: "Products",
+    label: "Produtos",
     icon: <Inventory2 />,
     element: <ProductsPage />,
     section: "management",
   },
   {
     path: "/orders",
-    label: "Orders",
+    label: "Pedidos",
     icon: <ShoppingCart />,
     element: <OrdersPage />,
     section: "management",
   },
   {
     path: "/orders/new",
-    label: "New Order",
+    label: "Criar pedido",
     icon: <AddShoppingCart />,
     element: <CreateOrderPage />,
     section: "management",

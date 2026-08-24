@@ -5,7 +5,6 @@ import {
   Stack,
   Typography,
   useTheme,
-  Switch
 } from "@mui/material";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -36,8 +35,6 @@ import { LatestOrdersSkeleton } from "./components/LatestOrdersSkeleton";
 import { TopProducts } from "./components/TopProducts";
 import { TopProductsSkeleton } from "./components/TopProductsSkeleton";
 
-import { useState } from "react";
-
 export default function Dashboard() {
   const theme = useTheme();
 
@@ -48,9 +45,7 @@ export default function Dashboard() {
     refetch,
   } = useDashboard();
 
-  const [shouldShowSkeleton, setShouldShowSkeleton] = useState(false);
-
-  if (isLoading || shouldShowSkeleton) {
+  if (isLoading) {
     return (
       <Box sx={{ m: 3 }}>
         <Stack spacing={4}>
@@ -97,10 +92,6 @@ export default function Dashboard() {
               <TopProductsSkeleton />
             </Grid>
           </Grid>
-          <Switch
-            checked={shouldShowSkeleton}
-            onChange={(event) => setShouldShowSkeleton(event.target.checked)}
-          />
         </Stack>
       </Box>
     );
@@ -261,10 +252,6 @@ export default function Dashboard() {
             />
           </Grid>
         </Grid>
-        <Switch
-          checked={shouldShowSkeleton}
-          onChange={(event) => setShouldShowSkeleton(event.target.checked)}
-          />
       </Stack>
     </Box>
   );

@@ -27,7 +27,7 @@ interface Props {
 }
 
 type Order = "asc" | "desc";
-type OrderBy = "name" | "price" | "stock";
+type OrderBy = "name" | "description" | "price" | "stock";
 
 export const ProductsTable = ({
   products,
@@ -49,8 +49,12 @@ export const ProductsTable = ({
 
       switch (orderBy) {
         case "name":
-          comparison = a.name.localeCompare(
-            b.name,
+          comparison = a.name.localeCompare(b.name);
+          break;
+
+        case "description":
+          comparison = a.description.localeCompare(
+            b.description,
           );
           break;
 
@@ -85,8 +89,37 @@ export const ProductsTable = ({
 
   return (
     <Paper>
-      <TableContainer>
-        <Table>
+      <TableContainer
+        sx={{
+          border: "1px solid",
+          borderColor: "divider",
+          borderBottom: "none",
+          borderRadius: 2,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          overflow: "hidden",
+        }}
+      >
+        <Table
+          sx={{
+            "& .MuiTableCell-root": {
+              borderRight: "1px solid",
+              borderColor: "divider",
+            },
+
+            "& .MuiTableCell-root:last-child": {
+              borderRight: "none",
+            },
+
+            "& .MuiTableHead-root .MuiTableCell-root": {
+              borderColor: "rgba(255, 255, 255, 0.2)",
+            },
+
+            "& .MuiTableBody-root .MuiTableRow:last-child .MuiTableCell-root": {
+              borderBottom: "none",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>
@@ -102,7 +135,13 @@ export const ProductsTable = ({
               </TableCell>
 
               <TableCell>
-                Descrição
+                <TableSortLabel
+                  active={orderBy === "description"}
+                  direction={order}
+                  onClick={() => handleSort("description")}
+                >
+                  Descrição
+                </TableSortLabel>
               </TableCell>
 
               <TableCell>

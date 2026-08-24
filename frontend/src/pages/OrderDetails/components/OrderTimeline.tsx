@@ -8,7 +8,7 @@ import {
 } from "@mui/lab";
 
 import {
-  Paper,
+  Card,
   Typography,
 } from "@mui/material";
 
@@ -61,8 +61,8 @@ export const OrderTimeline = ({
   events,
 }: Props) => {
   return (
-    <Paper
-      elevation={3}
+    <Card
+      elevation={5}
       sx={{
         borderRadius: 3,
         p: 3,
@@ -72,7 +72,7 @@ export const OrderTimeline = ({
         variant="h6"
         gutterBottom
       >
-        Processing Timeline
+        Timeline
       </Typography>
 
       <Timeline
@@ -139,6 +139,6 @@ export const OrderTimeline = ({
           ),
         )}
       </Timeline>
-    </Paper>
+    </Card>
   );
 };

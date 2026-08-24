@@ -118,7 +118,7 @@ export const MainLayout: React.FC = () => {
               py: 1,
             }}
           >
-            Results
+            Monitoramento
           </Typography>
         </ListItem>
 
@@ -182,7 +182,7 @@ export const MainLayout: React.FC = () => {
               color: "#FFF",
             }}
           >
-            RabbitMQ Order Processing
+            Processamento de Pedidos - RabbitMQ
           </Typography>
 
           <IconButton color="inherit" onClick={toggleTheme}>

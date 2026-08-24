@@ -7,7 +7,10 @@ import {
   Tabs,
   TextField,
   Typography,
-  Badge
+  Badge,
+  Button,
+  Stack,
+  Paper,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,6 +27,8 @@ export default function OrdersPage() {
   const {
     data: orders = [],
     isLoading,
+    isError,
+    refetch,
   } = useOrders();
 
   const counts = useMemo(
@@ -75,24 +80,106 @@ export default function OrdersPage() {
   }, [orders, search, statusFilter]);
 
   if (isLoading) {
-    return <OrdersTableSkeleton />;
+    return (
+      <Paper
+        elevation={5}
+        sx={{
+          m: 3,
+          p: 5,
+          borderRadius: 5,
+        }}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+          p={2}
+        >
+          <Typography
+            variant="h4"
+            fontWeight={600}
+          >
+            Pedidos
+          </Typography>
+        </Box>
+
+        <OrdersTableSkeleton />
+      </Paper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+        }}
+      >
+        <Stack
+          spacing={2}
+          alignItems="center"
+          textAlign="center"
+        >
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
+            Não foi possível carregar os pedidos
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            Ocorreu um erro ao buscar os dados.
+            Tente novamente.
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={() => refetch()}
+          >
+            Tentar novamente
+          </Button>
+        </Stack>
+      </Box>
+    );
   }
 
   return (
-    <Box>
-      <Typography
-        variant="h4"
+    <Paper
+      elevation={5}
+      sx={{
+        m: 3,
+        p: 5,
+        borderRadius: 5,
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
         mb={3}
+        p={2}
       >
-        Orders
-      </Typography>
+        <Typography
+          variant="h4"
+          fontWeight={600}
+        >
+          Pedidos
+        </Typography>
+      </Box>
 
       {orders.length > 0 && (
         <>
           <TextField
             fullWidth
             size="small"
-            placeholder="Search orders..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -115,7 +202,7 @@ export default function OrdersPage() {
             variant="scrollable"
             scrollButtons="auto"
             sx={{
-              mb: 3
+              mb: 3,
             }}
           >
             <Tab
@@ -126,7 +213,7 @@ export default function OrdersPage() {
                   badgeContent={counts.ALL}
                   max={99}
                 >
-                  <Box pr={2}>All</Box>
+                  <Box pr={2}>Todos</Box>
                 </Badge>
               }
             />
@@ -139,7 +226,7 @@ export default function OrdersPage() {
                   badgeContent={counts.PENDING}
                   max={99}
                 >
-                  <Box pr={2}>Pending</Box>
+                  <Box pr={2}>Pendente</Box>
                 </Badge>
               }
             />
@@ -154,7 +241,7 @@ export default function OrdersPage() {
                   }
                   max={99}
                 >
-                  <Box pr={2}>Processing</Box>
+                  <Box pr={2}>Processando</Box>
                 </Badge>
               }
             />
@@ -167,7 +254,7 @@ export default function OrdersPage() {
                   badgeContent={counts.APPROVED}
                   max={99}
                 >
-                  <Box pr={2}>Approved</Box>
+                  <Box pr={2}>Aprovado</Box>
                 </Badge>
               }
             />
@@ -180,7 +267,7 @@ export default function OrdersPage() {
                   badgeContent={counts.REJECTED}
                   max={99}
                 >
-                  <Box pr={2}>Rejected</Box>
+                  <Box pr={2}>Rejeitado</Box>
                 </Badge>
               }
             />
@@ -198,15 +285,15 @@ export default function OrdersPage() {
           gap={2}
         >
           <Typography variant="h6">
-            No orders found
+            Nenhum pedido encontrado
           </Typography>
 
           <Typography
             color="text.secondary"
             textAlign="center"
           >
-            Create your first order to start
-            tracking its processing.
+            Crie seu primeiro pedido para começar
+            a rastrear seu processamento.
           </Typography>
         </Box>
       ) : filteredOrders.length === 0 ? (
@@ -219,14 +306,14 @@ export default function OrdersPage() {
           gap={2}
         >
           <Typography variant="h6">
-            No orders found
+            Nenhum pedido encontrado
           </Typography>
 
           <Typography
             color="text.secondary"
             textAlign="center"
           >
-            No orders match the selected filters.
+            Nenhum pedido corresponde aos filtros selecionados.
           </Typography>
         </Box>
       ) : (
@@ -234,6 +321,6 @@ export default function OrdersPage() {
           orders={filteredOrders}
         />
       )}
-    </Box>
+    </Paper>
   );
 }

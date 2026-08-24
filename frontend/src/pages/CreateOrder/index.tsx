@@ -1,7 +1,10 @@
 import { useState } from "react";
 
 import {
+  Box,
+  Button,
   Grid,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -23,6 +26,8 @@ export default function NewOrderPage() {
   const {
     data: products = [],
     isLoading,
+    isError,
+    refetch,
   } = useProducts();
 
   const createOrderMutation =
@@ -75,7 +80,7 @@ export default function NewOrderPage() {
         );
 
         showSnackbar(
-          "Order created successfully!",
+          "Pedido criado com sucesso!",
           "success",
         );
 
@@ -88,71 +93,156 @@ export default function NewOrderPage() {
       }
     };
 
-  return (
-    <>
-      <Typography
-        variant="h4"
-        mb={3}
+  if (isLoading) {
+    return (
+      <Paper
+        elevation={5}
+        sx={{
+          m: 3,
+          p: 5,
+          borderRadius: 5,
+        }}
       >
-        New Order
-      </Typography>
+        <Box
+          display="flex"
+          alignItems="center"
+          mb={3}
+          p={2}
+        >
+          <Typography
+            variant="h4"
+            fontWeight={600}
+          >
+            Criar pedido
+          </Typography>
+        </Box>
+
+        <Grid container spacing={3}>
+          <Grid
+            size={{ xs: 12, md: 8 }}
+          >
+            <Stack spacing={2}>
+              {Array.from({
+                length: 6,
+              }).map((_, index) => (
+                <ProductCardSkeleton
+                  key={index}
+                />
+              ))}
+            </Stack>
+          </Grid>
+
+          <Grid
+            size={{ xs: 12, md: 4 }}
+          >
+            <OrderSummarySkeleton />
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+        }}
+      >
+        <Stack
+          spacing={2}
+          alignItems="center"
+          textAlign="center"
+        >
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
+            Não foi possível carregar o formulário de criar pedido
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            Ocorreu um erro ao buscar os dados.
+            Tente novamente.
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={() => refetch()}
+          >
+            Tentar novamente
+          </Button>
+        </Stack>
+      </Box>
+    );
+  }
+
+  return (
+    <Paper
+      elevation={5}
+      sx={{
+        m: 3,
+        p: 5,
+        borderRadius: 5,
+      }}
+    >
+      <Box
+        display="flex"
+        alignItems="center"
+        mb={3}
+        p={2}
+      >
+        <Typography
+          variant="h4"
+          fontWeight={600}
+        >
+          Criar pedido
+        </Typography>
+      </Box>
 
       <Grid container spacing={3}>
         <Grid
           size={{ xs: 12, md: 8 }}
         >
           <Stack spacing={2}>
-            {isLoading
-              ? Array.from({
-                  length: 6,
-                }).map((_, index) => (
-                  <ProductCardSkeleton
-                    key={index}
-                  />
-                ))
-              : items.map(
-                  (product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      quantity={
-                        product.quantity
-                      }
-                      onIncrease={() =>
-                        updateQuantity(
-                          product.id,
-                          product.quantity +
-                            1,
-                        )
-                      }
-                      onDecrease={() =>
-                        updateQuantity(
-                          product.id,
-                          product.quantity -
-                            1,
-                        )
-                      }
-                    />
-                  ),
-                )}
+            {items.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                quantity={product.quantity}
+                onIncrease={() =>
+                  updateQuantity(
+                    product.id,
+                    product.quantity + 1,
+                  )
+                }
+                onDecrease={() =>
+                  updateQuantity(
+                    product.id,
+                    product.quantity - 1,
+                  )
+                }
+              />
+            ))}
           </Stack>
         </Grid>
 
         <Grid
           size={{ xs: 12, md: 4 }}
         >
-          {isLoading ? (
-            <OrderSummarySkeleton />
-          ) : (
-            <OrderSummary
-              items={items}
-              onCreate={
-                handleCreateOrder
-              }
-            />
-          )}
+          <OrderSummary
+            items={items}
+            onCreate={handleCreateOrder}
+          />
         </Grid>
       </Grid>
-    </>
+    </Paper>
   );
 }

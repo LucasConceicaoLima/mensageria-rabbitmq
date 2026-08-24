@@ -17,6 +17,7 @@ import type { OrderResponse } from "../../../types/OrderResponse";
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 import { formatDateBr } from "../../../utils/formatDateBr";
 import { getStatusColor } from "../../../utils/getStatusColor";
+import { translateOrderStatus } from "../../../utils/translateOrderStatus";
 
 interface Props {
   order: OrderResponse;
@@ -25,7 +26,7 @@ interface Props {
 export const OrderInfo = ({ order }: Props) => {
   return (
     <Card
-      elevation={3}
+      elevation={5}
       sx={{
         borderRadius: 3,
         height: "100%",
@@ -36,7 +37,7 @@ export const OrderInfo = ({ order }: Props) => {
           variant="h6"
           gutterBottom
         >
-          Order Summary
+          Resumo do Pedido
         </Typography>
 
         <Divider sx={{ mb: 3 }} />
@@ -47,7 +48,7 @@ export const OrderInfo = ({ order }: Props) => {
               variant="caption"
               color="text.secondary"
             >
-              Order
+              Pedido
             </Typography>
 
             <Typography
@@ -69,10 +70,7 @@ export const OrderInfo = ({ order }: Props) => {
             </Typography>
 
             <Chip
-              label={order.status.replaceAll(
-                "_",
-                " ",
-              )}
+              label={translateOrderStatus(order.status)}
               color={getStatusColor(
                 order.status,
               )}
@@ -124,7 +122,7 @@ export const OrderInfo = ({ order }: Props) => {
                 variant="caption"
                 color="text.secondary"
               >
-                Items
+                Itens
               </Typography>
 
               <Typography>
@@ -147,7 +145,7 @@ export const OrderInfo = ({ order }: Props) => {
                 variant="caption"
                 color="text.secondary"
               >
-                Created
+                Criado em 
               </Typography>
 
               <Typography>
@@ -172,7 +170,7 @@ export const OrderInfo = ({ order }: Props) => {
                 variant="caption"
                 color="text.secondary"
               >
-                Updated
+                Última atualização em
               </Typography>
 
               <Typography>

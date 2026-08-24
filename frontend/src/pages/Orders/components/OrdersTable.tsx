@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import {
+  Chip,
   IconButton,
   Paper,
   Table,
@@ -17,19 +18,17 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 
 import type { OrderResponse } from "../../../types/OrderResponse";
-import { StatusChip } from "./StatusChip";
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 import { formatDateBr } from "../../../utils/formatDateBr";
+import { translateOrderStatus } from "../../../utils/translateOrderStatus";
+import { getStatusColor } from "../../../utils/getStatusColor";
 
 interface Props {
   orders: OrderResponse[];
 }
 
 type Order = "asc" | "desc";
-type OrderBy =
-  | "createdAt"
-  | "status"
-  | "total";
+type OrderBy = "createdAt" | "status" | "total";
 
 export const OrdersTable = ({
   orders,
@@ -54,12 +53,8 @@ export const OrdersTable = ({
       switch (orderBy) {
         case "createdAt":
           comparison =
-            new Date(
-              a.createdAt,
-            ).getTime() -
-            new Date(
-              b.createdAt,
-            ).getTime();
+            new Date(a.createdAt).getTime() -
+            new Date(b.createdAt).getTime();
           break;
 
         case "status":
@@ -94,18 +89,47 @@ export const OrdersTable = ({
   };
 
   return (
-    <Paper elevation={5}>
-      <TableContainer>
-        <Table>
+    <Paper>
+      <TableContainer
+        sx={{
+          border: "1px solid",
+          borderColor: "divider",
+          borderBottom: "none",
+          borderRadius: 2,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          overflow: "hidden",
+        }}
+      >
+        <Table
+          sx={{
+            "& .MuiTableCell-root": {
+              borderRight: "1px solid",
+              borderColor: "divider",
+            },
+
+            "& .MuiTableCell-root:last-child": {
+              borderRight: "none",
+            },
+
+            "& .MuiTableHead-root .MuiTableCell-root": {
+              borderColor:
+                "rgba(255, 255, 255, 0.2)",
+            },
+
+            "& .MuiTableBody-root .MuiTableRow:last-child .MuiTableCell-root":
+              {
+                borderBottom: "none",
+              },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
 
               <TableCell>
                 <TableSortLabel
-                  active={
-                    orderBy === "status"
-                  }
+                  active={orderBy === "status"}
                   direction={order}
                   onClick={() =>
                     handleSort("status")
@@ -117,9 +141,7 @@ export const OrdersTable = ({
 
               <TableCell>
                 <TableSortLabel
-                  active={
-                    orderBy === "total"
-                  }
+                  active={orderBy === "total"}
                   direction={order}
                   onClick={() =>
                     handleSort("total")
@@ -132,22 +154,22 @@ export const OrdersTable = ({
               <TableCell>
                 <TableSortLabel
                   active={
-                    orderBy ===
-                    "createdAt"
+                    orderBy === "createdAt"
                   }
                   direction={order}
                   onClick={() =>
-                    handleSort(
-                      "createdAt",
-                    )
+                    handleSort("createdAt")
                   }
                 >
-                  Created At
+                  Criado em
                 </TableSortLabel>
               </TableCell>
 
-              <TableCell align="center">
-                Actions
+              <TableCell
+                width={120}
+                align="center"
+              >
+                Ações
               </TableCell>
             </TableRow>
           </TableHead>
@@ -155,22 +177,24 @@ export const OrdersTable = ({
           <TableBody>
             {visibleOrders.map(
               (orderItem) => (
-                <TableRow
-                  key={orderItem.id}
-                >
+                <TableRow key={orderItem.id}>
                   <TableCell>
-                    {orderItem.id.slice(
-                      0,
-                      8,
-                    )}
+                    {orderItem.id.slice(0, 8)}
                     ...
                   </TableCell>
 
                   <TableCell>
-                    <StatusChip
-                      status={
-                        orderItem.status
-                      }
+                    <Chip
+                      label={translateOrderStatus(
+                        orderItem.status,
+                      )}
+                      color={getStatusColor(
+                        orderItem.status,
+                      )}
+                      size="small"
+                      sx={{
+                        fontWeight: 500,
+                      }}
                     />
                   </TableCell>
 
@@ -188,6 +212,7 @@ export const OrdersTable = ({
 
                   <TableCell align="center">
                     <IconButton
+                      color="primary"
                       onClick={() =>
                         navigate(
                           `/orders/${orderItem.id}`,
@@ -209,9 +234,7 @@ export const OrdersTable = ({
         count={orders.length}
         page={page}
         rowsPerPage={rowsPerPage}
-        onPageChange={(_, p) =>
-          setPage(p)
-        }
+        onPageChange={(_, p) => setPage(p)}
         onRowsPerPageChange={(e) => {
           setRowsPerPage(
             Number(e.target.value),
@@ -219,6 +242,14 @@ export const OrdersTable = ({
           setPage(0);
         }}
         rowsPerPageOptions={[10, 25, 50]}
+        labelRowsPerPage="Linhas por página:"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}–${to} de ${
+            count !== -1
+              ? count
+              : `mais de ${to}`
+          }`
+        }
       />
     </Paper>
   );

@@ -29,19 +29,19 @@ export const DeleteProductDialog = ({
       onClose={onClose}
     >
       <DialogTitle>
-        Delete Product
+        Excluir produto
       </DialogTitle>
 
       <DialogContent>
         <Typography>
-          Are you sure you want to delete
-          this product?
+          Tem certeza que deseja excluir
+          este produto?
         </Typography>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>
-          Cancel
+        <Button onClick={onClose} variant="outlined">
+          Cancelar
         </Button>
 
         <Button
@@ -50,7 +50,7 @@ export const DeleteProductDialog = ({
           onClick={onDelete}
           disabled={loading}
         >
-          Delete
+          Excluir
         </Button>
       </DialogActions>
     </Dialog>

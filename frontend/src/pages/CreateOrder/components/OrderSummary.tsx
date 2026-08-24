@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import type { SelectedProduct } from "../../../types/SelectedProduct";
-import { formatCurrencyBrl}  from "../../../utils/formatCurrencyBrl";
+import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 
 interface Props {
   items: SelectedProduct[];
@@ -34,31 +34,39 @@ export const OrderSummary = ({
           variant="h6"
           gutterBottom
         >
-          Order Summary
+          Resumo do Pedido
         </Typography>
 
         <Divider sx={{ mb: 2 }} />
 
         <Stack spacing={1}>
+          {items.filter((i) => i.quantity > 0).length === 0 ? (
+            <Typography
+              color="text.secondary"
+              textAlign="center"
+              sx={{ py: 2 }}
+            >
+              Adicione produtos ao pedido para ver o resumo.
+            </Typography>
+          ) : (
+            items
+              .filter((i) => i.quantity > 0)
+              .map((item) => (
+                <Stack
+                  key={item.id}
+                  direction="row"
+                  justifyContent="space-between"
+                >
+                  <Typography>
+                    {item.name} x{item.quantity}
+                  </Typography>
 
-          {items
-            .filter((i) => i.quantity > 0)
-            .map((item) => (
-              <Stack
-                key={item.id}
-                direction="row"
-                justifyContent="space-between"
-              >
-                <Typography>
-                  {item.name} x{item.quantity}
-                </Typography>
-
-                <Typography>
-                  {formatCurrencyBrl(item.price * item.quantity)}
-                </Typography>
-              </Stack>
-            ))}
-
+                  <Typography>
+                    {formatCurrencyBrl(item.price * item.quantity)}
+                  </Typography>
+                </Stack>
+              ))
+          )}
         </Stack>
 
         <Divider sx={{ my: 2 }} />

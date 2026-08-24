@@ -4,9 +4,7 @@ import { DashboardRepository } from './repositories/dashboard.repository';
 
 @Injectable()
 export class DashboardService {
-  constructor(
-    private readonly dashboardRepository: DashboardRepository,
-  ) {}
+  constructor(private readonly dashboardRepository: DashboardRepository) {}
 
   async findDashboard() {
     const [
