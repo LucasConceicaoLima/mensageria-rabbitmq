@@ -9,10 +9,11 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
 } from "@mui/material";
-import { translateOrderStatus } from "../../../utils/translateOrderStatus";
+
 import { useNavigate } from "react-router-dom";
+
+import { translateOrderStatus } from "../../../utils/translateOrderStatus";
 import { formatCurrencyBrl } from "../../../utils/formatCurrencyBrl";
 import { formatTimestampBr } from "../../../utils/formatTimestampBr";
 import { getStatusColor } from "../../../utils/getStatusColor";
@@ -23,45 +24,44 @@ interface Props {
   orders: Latest[];
 }
 
-export const LatestOrders = ({ orders }: Props) => {
+export const LatestOrders = ({
+  orders,
+}: Props) => {
   const navigate = useNavigate();
-  const theme = useTheme();
 
   return (
     <Card
-      elevation={3}
+      elevation={0}
       sx={{
-        borderRadius: 3,
-        backgroundColor: theme.palette.background.paper,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: "divider",
+        backgroundColor: "background.paper",
       }}
     >
       <CardContent
         sx={{
-          m: 2,
-          p: 0,
+          p: 2.5,
+
           "&:last-child": {
-            pb: 0,
+            pb: 2.5,
           },
         }}
       >
-        <Box sx={{ mb: 2 }}>
+        {/* Header */}
+        <Box mb={2}>
           <Typography
             variant="h6"
-            fontWeight={700}
-            sx={{
-              color: theme.palette.text.primary,
-              letterSpacing: "-0.3px",
-            }}
+            fontWeight={600}
+            letterSpacing="-0.01em"
           >
             Últimos Pedidos
           </Typography>
 
           <Typography
             variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              mt: 0.3,
-            }}
+            color="text.secondary"
+            mt={0.5}
           >
             Pedidos mais recentes
           </Typography>
@@ -73,7 +73,8 @@ export const LatestOrders = ({ orders }: Props) => {
               <TableCell
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Pedido
@@ -82,7 +83,8 @@ export const LatestOrders = ({ orders }: Props) => {
               <TableCell
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Status
@@ -91,7 +93,8 @@ export const LatestOrders = ({ orders }: Props) => {
               <TableCell
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Total
@@ -100,7 +103,8 @@ export const LatestOrders = ({ orders }: Props) => {
               <TableCell
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Data
@@ -115,11 +119,14 @@ export const LatestOrders = ({ orders }: Props) => {
                 hover
                 sx={{
                   cursor: "pointer",
+
                   "&:last-child td": {
                     borderBottom: 0,
                   },
                 }}
-                onClick={() => navigate(`/orders/${order.id}`)}
+                onClick={() =>
+                  navigate(`/orders/${order.id}`)
+                }
               >
                 <TableCell>
                   <Typography
@@ -132,8 +139,12 @@ export const LatestOrders = ({ orders }: Props) => {
 
                 <TableCell>
                   <Chip
-                    label={translateOrderStatus(order.status)}
-                    color={getStatusColor(order.status)}
+                    label={translateOrderStatus(
+                      order.status,
+                    )}
+                    color={getStatusColor(
+                      order.status,
+                    )}
                     size="small"
                     sx={{
                       fontWeight: 500,
@@ -142,11 +153,25 @@ export const LatestOrders = ({ orders }: Props) => {
                 </TableCell>
 
                 <TableCell>
-                  {formatCurrencyBrl(order.total)}
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {formatCurrencyBrl(
+                      order.total,
+                    )}
+                  </Typography>
                 </TableCell>
 
                 <TableCell>
-                  {formatTimestampBr(order.createdAt)}
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                  >
+                    {formatTimestampBr(
+                      order.createdAt,
+                    )}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
@@ -158,7 +183,7 @@ export const LatestOrders = ({ orders }: Props) => {
                   colSpan={4}
                   sx={{
                     py: 5,
-                    color: theme.palette.text.secondary,
+                    color: "text.secondary",
                     borderBottom: 0,
                   }}
                 >

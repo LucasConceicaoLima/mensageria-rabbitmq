@@ -15,7 +15,6 @@ interface Props {
   title: string;
   value: number | string;
   loading?: boolean;
-  color?: string;
 
   currency?: boolean;
 
@@ -29,15 +28,12 @@ export const DashboardCard = ({
   title,
   value,
   loading = false,
-  color,
   currency = false,
   suffix,
   prefix,
   icon,
 }: Props) => {
   const theme = useTheme();
-
-  const accentColor = color ?? theme.palette.primary.main;
 
   let displayValue: string | number = value;
 
@@ -53,32 +49,20 @@ export const DashboardCard = ({
     <Card
       elevation={0}
       sx={{
-        position: "relative",
         height: "100%",
         minHeight: 136,
 
-        borderRadius: 3,
+        borderRadius: 2,
 
-        border: `1px solid ${theme.palette.divider}`,
-        borderLeft: `6px solid ${accentColor}`,
+        border: "1px solid",
+        borderColor: "divider",
 
-        backgroundColor: theme.palette.background.paper,
-
-        transition: "transform 0.2s ease, box-shadow 0.2s ease",
-
-        "&:hover": {
-          transform: "translateY(-3px)",
-          boxShadow:
-            theme.palette.mode === "dark"
-              ? "0 8px 24px rgba(0,0,0,0.35)"
-              : "0 8px 24px rgba(0,0,0,0.12)",
-        },
+        backgroundColor: "background.paper",
       }}
     >
       <CardContent
         sx={{
           height: "100%",
-          ml: 1,
           p: 2.5,
 
           "&:last-child": {
@@ -103,9 +87,6 @@ export const DashboardCard = ({
             variant="body2"
             color="text.secondary"
             fontWeight={500}
-            sx={{
-              fontSize: "0.95rem",
-            }}
           >
             {title}
           </Typography>
@@ -113,25 +94,25 @@ export const DashboardCard = ({
           {icon && (
             <Box
               sx={{
-                width: 44,
-                height: 44,
+                width: 40,
+                height: 40,
                 borderRadius: 2,
 
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
 
-                color: accentColor,
+                color: "primary.main",
 
                 backgroundColor:
                   theme.palette.mode === "dark"
-                    ? `${accentColor}18`
-                    : `${accentColor}12`,
+                    ? "rgba(144, 202, 249, 0.12)"
+                    : "rgba(25, 118, 210, 0.08)",
 
                 flexShrink: 0,
 
                 "& svg": {
-                  fontSize: 28,
+                  fontSize: 24,
                 },
               }}
             >
@@ -141,7 +122,7 @@ export const DashboardCard = ({
         </Box>
 
         {/* Value */}
-        <Box sx={{ mt: 1 }}>
+        <Box sx={{ mt: 2 }}>
           {loading ? (
             <Skeleton
               variant="text"
@@ -150,15 +131,15 @@ export const DashboardCard = ({
             />
           ) : (
             <Typography
-              fontWeight={700}
-              color={color ?? "text.primary"}
+              fontWeight={600}
+              color="text.primary"
               sx={{
                 lineHeight: 1.1,
 
                 fontSize: {
                   xs: "1.9rem",
-                  sm: currency ? "2rem" : "2.5rem",
-                  md: currency ? "2.15rem" : "2.7rem",
+                  sm: currency ? "2rem" : "2.3rem",
+                  md: currency ? "2.1rem" : "2.5rem",
                 },
 
                 letterSpacing: "-0.02em",

@@ -20,44 +20,44 @@ export function OrdersTimeline({ data }: Props) {
 
   return (
     <Card
-      elevation={3}
+      elevation={0}
       sx={{
         height: 420,
-        borderRadius: 3,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: "divider",
+        backgroundColor: "background.paper",
       }}
     >
       <CardContent
         sx={{
-          m: 2,
-          p: 0,
+          p: 2.5,
+
           "&:last-child": {
-            pb: 0,
+            pb: 2.5,
           },
         }}
       >
-        <Box sx={{ mb: 1 }}>
+        {/* Header */}
+        <Box mb={1}>
           <Typography
             variant="h6"
-            fontWeight={700}
-            sx={{
-              color: theme.palette.text.primary,
-              letterSpacing: "-0.3px",
-            }}
+            fontWeight={600}
+            letterSpacing="-0.01em"
           >
             Pedidos
           </Typography>
 
           <Typography
             variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              mt: 0.3,
-            }}
+            color="text.secondary"
+            mt={0.5}
           >
             Pedidos ao longo do período
           </Typography>
         </Box>
 
+        {/* Chart */}
         <BarChart
           height={320}
           grid={{
@@ -67,7 +67,9 @@ export function OrdersTimeline({ data }: Props) {
           xAxis={[
             {
               scaleType: "band",
-              data: data.map((item) => formatDateBr(item.date)),
+              data: data.map((item) =>
+                formatDateBr(item.date),
+              ),
               categoryGapRatio: 0.75,
             },
           ]}
@@ -81,15 +83,18 @@ export function OrdersTimeline({ data }: Props) {
           series={[
             {
               label: "Pedidos",
-              data: data.map((item) => item.orders),
+              data: data.map(
+                (item) => item.orders,
+              ),
               color: theme.palette.primary.main,
             },
           ]}
-          borderRadius={6}
+          borderRadius={4}
           sx={{
             "& .MuiChartsSurface-root": {
               overflow: "visible",
             },
+
             "& svg": {
               overflow: "visible",
             },

@@ -20,6 +20,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import type { OrderEventResponse } from "../../../types/OrderEventResponse";
 
 import { formatDateBr } from "../../../utils/formatDateBr";
+import { translateOrderStatus } from "../../../utils/translateOrderStatus";
+import { translateOrderEventMessage } from "../../../utils/translateOrderEventMessage";
 
 interface Props {
   events: OrderEventResponse[];
@@ -113,17 +115,14 @@ export const OrderTimeline = ({
                 <Typography
                   fontWeight={700}
                 >
-                  {event.status.replaceAll(
-                    "_",
-                    " ",
-                  )}
+                  {translateOrderStatus(event.status)}
                 </Typography>
 
                 <Typography
                   variant="body2"
                   color="text.secondary"
                 >
-                  {event.message}
+                  {translateOrderEventMessage(event.message)}
                 </Typography>
 
                 <Typography

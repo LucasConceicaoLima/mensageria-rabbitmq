@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Grid,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -30,21 +29,19 @@ export default function NewOrderPage() {
     refetch,
   } = useProducts();
 
-  const createOrderMutation =
-    useCreateOrder();
+  const createOrderMutation = useCreateOrder();
 
-  const { showSnackbar } =
-    useSnackbar();
+  const { showSnackbar } = useSnackbar();
 
   const [quantities, setQuantities] =
     useState<Record<string, number>>({});
 
-  const items: SelectedProduct[] =
-    products.map((product) => ({
+  const items: SelectedProduct[] = products.map(
+    (product) => ({
       ...product,
-      quantity:
-        quantities[product.id] ?? 0,
-    }));
+      quantity: quantities[product.id] ?? 0,
+    }),
+  );
 
   const updateQuantity = (
     productId: string,
@@ -56,89 +53,77 @@ export default function NewOrderPage() {
     }));
   };
 
-  const handleCreateOrder =
-    async () => {
-      const selectedItems =
-        items.filter(
-          (item) => item.quantity > 0,
-        );
+  const handleCreateOrder = async () => {
+    const selectedItems = items.filter(
+      (item) => item.quantity > 0,
+    );
 
-      if (!selectedItems.length) {
-        return;
-      }
+    if (!selectedItems.length) {
+      return;
+    }
 
-      try {
-        await createOrderMutation.mutateAsync(
-          {
-            items: selectedItems.map(
-              (item) => ({
-                productId: item.id,
-                quantity: item.quantity,
-              }),
-            ),
-          },
-        );
+    try {
+      await createOrderMutation.mutateAsync({
+        items: selectedItems.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+      });
 
-        showSnackbar(
-          "Pedido criado com sucesso!",
-          "success",
-        );
+      showSnackbar(
+        "Pedido criado com sucesso!",
+        "success",
+      );
 
-        setQuantities({});
-      } catch (error) {
-        showSnackbar(
-          getApiErrorMessage(error),
-          "error",
-        );
-      }
-    };
+      setQuantities({});
+    } catch (error) {
+      showSnackbar(
+        getApiErrorMessage(error),
+        "error",
+      );
+    }
+  };
 
   if (isLoading) {
     return (
-      <Paper
-        elevation={5}
-        sx={{
-          m: 3,
-          p: 5,
-          borderRadius: 5,
-        }}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          mb={3}
-          p={2}
-        >
+      <Box sx={{ m: 3 }}>
+        <Box mb={4}>
           <Typography
             variant="h4"
-            fontWeight={600}
+            fontWeight={700}
+            letterSpacing="-0.02em"
           >
             Criar pedido
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            mt={0.5}
+          >
+            Selecione os produtos e defina as
+            quantidades para criar um novo pedido.
           </Typography>
         </Box>
 
         <Grid container spacing={3}>
-          <Grid
-            size={{ xs: 12, md: 8 }}
-          >
+          <Grid size={{ xs: 12, md: 8 }}>
             <Stack spacing={2}>
-              {Array.from({
-                length: 6,
-              }).map((_, index) => (
-                <ProductCardSkeleton
-                  key={index}
-                />
-              ))}
+              {Array.from({ length: 6 }).map(
+                (_, index) => (
+                  <ProductCardSkeleton
+                    key={index}
+                  />
+                ),
+              )}
             </Stack>
           </Grid>
 
-          <Grid
-            size={{ xs: 12, md: 4 }}
-          >
+          <Grid size={{ xs: 12, md: 4 }}>
             <OrderSummarySkeleton />
           </Grid>
         </Grid>
-      </Paper>
+      </Box>
     );
   }
 
@@ -162,7 +147,7 @@ export default function NewOrderPage() {
             variant="h6"
             fontWeight={600}
           >
-            Não foi possível carregar o formulário de criar pedido
+            Não foi possível carregar os produtos
           </Typography>
 
           <Typography
@@ -185,32 +170,29 @@ export default function NewOrderPage() {
   }
 
   return (
-    <Paper
-      elevation={5}
-      sx={{
-        m: 3,
-        p: 5,
-        borderRadius: 5,
-      }}
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        mb={3}
-        p={2}
-      >
+    <Box sx={{ m: 3 }}>
+      <Box mb={4}>
         <Typography
           variant="h4"
-          fontWeight={600}
+          fontWeight={700}
+          letterSpacing="-0.02em"
         >
           Criar pedido
         </Typography>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          mt={0.5}
+        >
+          Selecione os produtos e defina as
+          quantidades para criar um novo pedido.
+        </Typography>
       </Box>
 
+      {/* Content */}
       <Grid container spacing={3}>
-        <Grid
-          size={{ xs: 12, md: 8 }}
-        >
+        <Grid size={{ xs: 12, md: 8 }}>
           <Stack spacing={2}>
             {items.map((product) => (
               <ProductCard
@@ -234,15 +216,13 @@ export default function NewOrderPage() {
           </Stack>
         </Grid>
 
-        <Grid
-          size={{ xs: 12, md: 4 }}
-        >
+        <Grid size={{ xs: 12, md: 4 }}>
           <OrderSummary
             items={items}
             onCreate={handleCreateOrder}
           />
         </Grid>
       </Grid>
-    </Paper>
+    </Box>
   );
 }

@@ -8,7 +8,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
 } from "@mui/material";
 
 import type { TopProducts as Ranking } from "../../../types/dashboard/TopProducts";
@@ -17,44 +16,42 @@ interface Props {
   products: Ranking[];
 }
 
-export const TopProducts = ({ products }: Props) => {
-  const theme = useTheme();
-
+export const TopProducts = ({
+  products,
+}: Props) => {
   return (
     <Card
-      elevation={3}
+      elevation={0}
       sx={{
-        borderRadius: 3,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: "divider",
+        backgroundColor: "background.paper",
       }}
     >
       <CardContent
         sx={{
-          m: 2,
-          p: 0,
+          p: 2.5,
+
           "&:last-child": {
-            pb: 0,
+            pb: 2.5,
           },
         }}
       >
         {/* Header */}
-        <Box sx={{ mb: 2 }}>
+        <Box mb={2}>
           <Typography
             variant="h6"
-            fontWeight={700}
-            sx={{
-              color: theme.palette.text.primary,
-              letterSpacing: "-0.3px",
-            }}
+            fontWeight={600}
+            letterSpacing="-0.01em"
           >
             Produtos Mais Vendidos
           </Typography>
 
           <Typography
             variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              mt: 0.3,
-            }}
+            color="text.secondary"
+            mt={0.5}
           >
             Ranking de produtos por quantidade vendida
           </Typography>
@@ -66,7 +63,8 @@ export const TopProducts = ({ products }: Props) => {
               <TableCell
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Produto
@@ -76,7 +74,8 @@ export const TopProducts = ({ products }: Props) => {
                 align="right"
                 sx={{
                   fontWeight: 600,
-                  color: theme.palette.text.secondary,
+                  color: "text.secondary",
+                  borderColor: "divider",
                 }}
               >
                 Vendidos
@@ -92,6 +91,10 @@ export const TopProducts = ({ products }: Props) => {
                   "&:last-child td": {
                     borderBottom: 0,
                   },
+
+                  "&:hover": {
+                    backgroundColor: "action.hover",
+                  },
                 }}
               >
                 <TableCell>
@@ -106,17 +109,20 @@ export const TopProducts = ({ products }: Props) => {
                       variant="body2"
                       fontWeight={600}
                       sx={{
-                        minWidth: 24,
+                        minWidth: 28,
                         color:
                           index < 3
-                            ? theme.palette.primary.main
-                            : theme.palette.text.secondary,
+                            ? "primary.main"
+                            : "text.secondary",
                       }}
                     >
                       #{index + 1}
                     </Typography>
 
-                    <Typography variant="body2">
+                    <Typography
+                      variant="body2"
+                      color="text.primary"
+                    >
                       {product.productName}
                     </Typography>
                   </Box>
@@ -125,7 +131,8 @@ export const TopProducts = ({ products }: Props) => {
                 <TableCell align="right">
                   <Typography
                     variant="body2"
-                    fontWeight={700}
+                    fontWeight={600}
+                    color="text.primary"
                   >
                     {product.quantitySold}
                   </Typography>
@@ -140,7 +147,7 @@ export const TopProducts = ({ products }: Props) => {
                   colSpan={2}
                   sx={{
                     py: 5,
-                    color: theme.palette.text.secondary,
+                    color: "text.secondary",
                     borderBottom: 0,
                   }}
                 >

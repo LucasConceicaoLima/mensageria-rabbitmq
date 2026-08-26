@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   InputAdornment,
-  Paper,
   Stack,
   TextField,
   Typography,
@@ -139,39 +138,41 @@ const ProductsPage = () => {
 
   if (isLoading) {
     return (
-      <Paper
-        elevation={5}
-        sx={{
-          m: 3,
-          p: 5,
-          borderRadius: 5,
-        }}
-      >
-        <Box
-          display="flex"
+      <Box sx={{ p: 3 }}>
+        <Stack
+          direction="row"
           justifyContent="space-between"
           alignItems="center"
-          mb={3}
-          p={2}
+          mb={4}
         >
-          <Typography
-            variant="h4"
-            fontWeight={600}
-          >
-            Products
-          </Typography>
+          <Box>
+            <Typography
+              variant="h5"
+              fontWeight={600}
+            >
+              Produtos
+            </Typography>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              mt={0.5}
+            >
+              Gerencie os produtos disponíveis na plataforma.
+            </Typography>
+          </Box>
 
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             disabled
           >
-            New Product
+            Novo produto
           </Button>
-        </Box>
+        </Stack>
 
         <ProductsTableSkeleton />
-      </Paper>
+      </Box>
     );
   }
 
@@ -219,50 +220,57 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Paper
-        elevation={5}
-        sx={{
-          m: 3,
-          p: 5,
-          borderRadius: 5,
-        }}
-      >
-        <Box
-          display="flex"
+      <Box sx={{ p: 3 }}>
+        <Stack
+          direction="row"
           justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-          p={2}
+          alignItems="flex-start"
+          mb={4}
         >
-          <Typography
-            variant="h4"
-            fontWeight={600}
-          >
-            Produtos
-          </Typography>
+          <Box>
+            <Typography
+              variant="h4"
+              fontWeight={700}
+              letterSpacing="-0.02em"
+            >
+              Produtos
+            </Typography>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              mt={0.5}
+            >
+              Gerencie os produtos disponíveis na plataforma.
+            </Typography>
+          </Box>
 
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleCreate}
           >
-            Novo Produto
+            Novo produto
           </Button>
-        </Box>
+        </Stack>
 
         {products.length > 0 && (
           <TextField
             fullWidth
             size="small"
+            placeholder="Pesquisar produtos..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
             }
-            sx={{ mb: 3 }}
+            sx={{
+              mb: 3,
+              maxWidth: 400,
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon fontSize="small" />
                 </InputAdornment>
               ),
             }}
@@ -278,7 +286,10 @@ const ProductsPage = () => {
             py={8}
             gap={2}
           >
-            <Typography variant="h6">
+            <Typography
+              variant="h6"
+              fontWeight={600}
+            >
               Nenhum produto encontrado
             </Typography>
 
@@ -299,7 +310,10 @@ const ProductsPage = () => {
             py={8}
             gap={2}
           >
-            <Typography variant="h6">
+            <Typography
+              variant="h6"
+              fontWeight={600}
+            >
               Nenhum produto encontrado
             </Typography>
 
@@ -317,7 +331,7 @@ const ProductsPage = () => {
             onDelete={handleDelete}
           />
         )}
-      </Paper>
+      </Box>
 
       <ProductFormDialog
         open={formOpen}

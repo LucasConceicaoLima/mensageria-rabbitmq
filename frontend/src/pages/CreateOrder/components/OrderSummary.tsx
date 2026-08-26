@@ -86,7 +86,7 @@ export const OrderSummary = ({
           onClick={onCreate}
           disabled={total === 0}
         >
-          Create Order
+          Criar Pedido
         </Button>
 
       </CardContent>

@@ -4,7 +4,6 @@ import {
   Grid,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -36,8 +35,6 @@ import { TopProducts } from "./components/TopProducts";
 import { TopProductsSkeleton } from "./components/TopProductsSkeleton";
 
 export default function Dashboard() {
-  const theme = useTheme();
-
   const {
     data: dashboard,
     isLoading,
@@ -53,7 +50,7 @@ export default function Dashboard() {
             {Array.from({ length: 4 }).map((_, index) => (
               <Grid
                 key={index}
-                size={{ xs: 12, md: 3 }}
+                size={{ xs: 12, sm: 6, md: 3 }}
               >
                 <DashboardCardSkeleton />
               </Grid>
@@ -147,40 +144,36 @@ export default function Dashboard() {
     <Box sx={{ m: 3 }}>
       <Stack spacing={4}>
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <DashboardCard
               title="Pedidos"
               value={dashboard.kpis.totalOrders}
-              color={theme.palette.primary.main}
               icon={<ShoppingCartIcon />}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <DashboardCard
               title="Receita"
               value={dashboard.kpis.totalRevenue}
-              color={theme.palette.success.main}
               currency
               icon={<PaymentsIcon />}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <DashboardCard
               title="Ticket Médio"
               value={dashboard.kpis.averageTicket}
-              color={theme.palette.warning.main}
               currency
               icon={<ReceiptLongIcon />}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <DashboardCard
               title="Produtos Vendidos"
               value={dashboard.kpis.productsSold}
-              color={theme.palette.error.main}
               icon={<Inventory2Icon />}
             />
           </Grid>
@@ -191,7 +184,6 @@ export default function Dashboard() {
             <DashboardCard
               title="Taxa de Aprovação"
               value={dashboard.kpis.approvalRate}
-              color={theme.palette.success.main}
               suffix="%"
               icon={<CheckCircleIcon />}
             />
@@ -201,7 +193,6 @@ export default function Dashboard() {
             <DashboardCard
               title="Taxa de Rejeição"
               value={dashboard.kpis.rejectionRate}
-              color={theme.palette.error.main}
               suffix="%"
               icon={<CancelIcon />}
             />
@@ -211,7 +202,6 @@ export default function Dashboard() {
             <DashboardCard
               title="Tempo Médio de Processamento"
               value={dashboard.kpis.averageProcessingTime}
-              color={theme.palette.secondary.main}
               suffix=" min"
               icon={<ScheduleIcon />}
             />
@@ -235,10 +225,12 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
+        {/* Orders */}
         <OrdersTimeline
           data={dashboard.ordersPerDay}
         />
 
+        {/* Tables */}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 6 }}>
             <LatestOrders
