@@ -109,4 +109,59 @@ export class RabbitMQService
 
     return published;
   }
+
+  async reprocessFromDlq(): Promise<boolean> {
+    const message =
+      await this.channel.get(
+        RABBITMQ_DLQ,
+        {
+          noAck: false,
+        },
+      );
+
+    if (!message) {
+      this.logger.log(
+        'No messages available in DLQ.',
+      );
+
+      return false;
+    }
+
+    try {
+      const headers = {
+        ...message.properties.headers,
+        'x-retry-count': 0,
+      };
+
+      this.channel.sendToQueue(
+        RABBITMQ_QUEUE,
+        message.content,
+        {
+          persistent: true,
+          headers,
+        },
+      );
+
+      this.channel.ack(message);
+
+      this.logger.log(
+        `Message reprocessed from "${RABBITMQ_DLQ}" to "${RABBITMQ_QUEUE}".`,
+      );
+
+      return true;
+    } catch (error) {
+      this.channel.nack(
+        message,
+        false,
+        true,
+      );
+
+      this.logger.error(
+        'Error reprocessing message from DLQ',
+        error,
+      );
+
+      throw error;
+    }
+  }
 }

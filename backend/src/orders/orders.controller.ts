@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+} from '@nestjs/common';
+
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -15,23 +22,48 @@ import { OrderEventResponseDto } from './dto/order-event-response.dto';
 @ApiTags('Orders')
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+  ) {}
 
   @Post()
-  @ResponseMessage('Order created successfully.')
+  @ResponseMessage(
+    'Order created successfully.',
+  )
   @ApiOperation({
     summary: 'Create a new order',
   })
   @ApiCreatedResponse({
-    description: 'Order created successfully.',
+    description:
+      'Order created successfully.',
     type: OrderResponseDto,
   })
-  create(@Body() dto: CreateOrderDto) {
+  create(
+    @Body() dto: CreateOrderDto,
+  ) {
     return this.ordersService.create(dto);
   }
 
+  @Post('dlq/reprocess')
+  @ResponseMessage(
+    'DLQ message reprocessed successfully.',
+  )
+  @ApiOperation({
+    summary:
+      'Reprocess one message from the DLQ',
+  })
+  @ApiOkResponse({
+    description:
+      'Message reprocessed successfully.',
+  })
+  reprocessDlq() {
+    return this.ordersService.reprocessDlq();
+  }
+
   @Get()
-  @ResponseMessage('Orders retrieved successfully.')
+  @ResponseMessage(
+    'Orders retrieved successfully.',
+  )
   @ApiOperation({
     summary: 'Get all orders',
   })
@@ -45,7 +77,9 @@ export class OrdersController {
   }
 
   @Get(':id')
-  @ResponseMessage('Order retrieved successfully.')
+  @ResponseMessage(
+    'Order retrieved successfully.',
+  )
   @ApiOperation({
     summary: 'Get an order by id',
   })
@@ -53,12 +87,18 @@ export class OrdersController {
     description: 'Order found.',
     type: OrderResponseDto,
   })
-  findById(@Param('id') id: string) {
-    return this.ordersService.findById(id);
+  findById(
+    @Param('id') id: string,
+  ) {
+    return this.ordersService.findById(
+      id,
+    );
   }
 
   @Get(':id/events')
-  @ResponseMessage('Order events retrieved successfully.')
+  @ResponseMessage(
+    'Order events retrieved successfully.',
+  )
   @ApiOperation({
     summary: 'Get order timeline',
   })
@@ -66,7 +106,11 @@ export class OrdersController {
     type: OrderEventResponseDto,
     isArray: true,
   })
-  findEvents(@Param('id') id: string) {
-    return this.ordersService.findEvents(id);
+  findEvents(
+    @Param('id') id: string,
+  ) {
+    return this.ordersService.findEvents(
+      id,
+    );
   }
 }
