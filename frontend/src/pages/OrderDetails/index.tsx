@@ -5,7 +5,6 @@ import {
   Button,
   Chip,
   Grid,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -40,37 +39,23 @@ export default function OrderDetailsPage() {
 
   if (isLoading) {
     return (
-      <Paper
-        elevation={5}
-        sx={{
-          m: 3,
-          p: 5,
-          borderRadius: 5,
-        }}
-      >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
-          p={2}
-        >
-          <Box>
-            <Typography
-              variant="h4"
-              fontWeight={600}
-            >
-              Pedido #
-              {id?.slice(-8).toUpperCase()}
-            </Typography>
+      <Box sx={{ p: 3 }}>
+        <Box mb={4}>
+          <Typography
+            variant="h5"
+            fontWeight={600}
+          >
+            Pedido #
+            {id?.slice(-8).toUpperCase()}
+          </Typography>
 
-            <Typography
-              color="text.secondary"
-              mt={0.5}
-            >
-              Detalhes do pedido
-            </Typography>
-          </Box>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            mt={0.5}
+          >
+            Detalhes do pedido
+          </Typography>
         </Box>
 
         <Grid container spacing={3}>
@@ -96,7 +81,7 @@ export default function OrderDetailsPage() {
             <OrderItemTableSkeleton />
           </Grid>
         </Grid>
-      </Paper>
+      </Box>
     );
   }
 
@@ -181,32 +166,25 @@ export default function OrderDetailsPage() {
     order.status === "APPROVED"
       ? "success"
       : order.status === "REJECTED"
-      ? "error"
-      : order.status ===
-        "PROCESSING_PAYMENT"
-      ? "warning"
-      : "default";
+        ? "error"
+        : order.status ===
+          "PROCESSING_PAYMENT"
+          ? "warning"
+          : "default";
 
   return (
-    <Paper
-      elevation={5}
-      sx={{
-        m: 3,
-        p: 5,
-        borderRadius: 5,
-      }}
-    >
-      <Box
-        display="flex"
+    <Box sx={{ p: 3 }}>
+      <Stack
+        direction="row"
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="flex-start"
         mb={4}
-        p={2}
       >
         <Box>
           <Typography
             variant="h4"
-            fontWeight={600}
+            fontWeight={700}
+            letterSpacing="-0.02em"
           >
             Pedido #
             {order.id
@@ -215,6 +193,7 @@ export default function OrderDetailsPage() {
           </Typography>
 
           <Typography
+            variant="body2"
             color="text.secondary"
             mt={0.5}
           >
@@ -227,10 +206,10 @@ export default function OrderDetailsPage() {
           color={chipColor}
           sx={{
             px: 1,
-            fontWeight: 700,
+            fontWeight: 600,
           }}
         />
-      </Box>
+      </Stack>
 
       <Grid container spacing={3}>
         <Grid
@@ -259,6 +238,6 @@ export default function OrderDetailsPage() {
           />
         </Grid>
       </Grid>
-    </Paper>
+    </Box>
   );
 }

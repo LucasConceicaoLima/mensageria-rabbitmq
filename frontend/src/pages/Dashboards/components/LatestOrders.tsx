@@ -6,6 +6,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Typography,
@@ -67,134 +68,154 @@ export const LatestOrders = ({
           </Typography>
         </Box>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{
-                  fontWeight: 600,
-                  color: "text.secondary",
-                  borderColor: "divider",
-                }}
-              >
-                Pedido
-              </TableCell>
+        <TableContainer
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 2,
+            overflow: "hidden",
+          }}
+        >
+          <Table
+            sx={{
+              "& .MuiTableCell-root": {
+                borderRight: "1px solid",
+                borderColor: "divider",
+              },
 
-              <TableCell
-                sx={{
-                  fontWeight: 600,
-                  color: "text.secondary",
-                  borderColor: "divider",
-                }}
-              >
-                Status
-              </TableCell>
+              "& .MuiTableCell-root:last-child": {
+                borderRight: "none",
+              },
 
-              <TableCell
-                sx={{
-                  fontWeight: 600,
-                  color: "text.secondary",
-                  borderColor: "divider",
-                }}
-              >
-                Total
-              </TableCell>
+              "& .MuiTableHead-root .MuiTableCell-root": {
+                borderColor: "divider",
+              },
 
-              <TableCell
-                sx={{
-                  fontWeight: 600,
-                  color: "text.secondary",
-                  borderColor: "divider",
-                }}
-              >
-                Data
-              </TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow
-                key={order.id}
-                hover
-                sx={{
-                  cursor: "pointer",
-
-                  "&:last-child td": {
-                    borderBottom: 0,
-                  },
-                }}
-                onClick={() =>
-                  navigate(`/orders/${order.id}`)
-                }
-              >
-                <TableCell>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                  >
-                    #{order.id.slice(-8)}
-                  </Typography>
-                </TableCell>
-
-                <TableCell>
-                  <Chip
-                    label={translateOrderStatus(
-                      order.status,
-                    )}
-                    color={getStatusColor(
-                      order.status,
-                    )}
-                    size="small"
-                    sx={{
-                      fontWeight: 500,
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                  >
-                    {formatCurrencyBrl(
-                      order.total,
-                    )}
-                  </Typography>
-                </TableCell>
-
-                <TableCell>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {formatTimestampBr(
-                      order.createdAt,
-                    )}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-
-            {!orders.length && (
+              "& .MuiTableBody-root .MuiTableRow:last-child .MuiTableCell-root":
+                {
+                  borderBottom: "none",
+                },
+            }}
+          >
+            <TableHead>
               <TableRow>
                 <TableCell
-                  align="center"
-                  colSpan={4}
                   sx={{
-                    py: 5,
+                    fontWeight: 600,
                     color: "text.secondary",
-                    borderBottom: 0,
                   }}
                 >
-                  <Typography variant="body2">
-                    Nenhum pedido encontrado.
-                  </Typography>
+                  Pedido
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontWeight: 600,
+                    color: "text.secondary",
+                  }}
+                >
+                  Status
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontWeight: 600,
+                    color: "text.secondary",
+                  }}
+                >
+                  Total
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    fontWeight: 600,
+                    color: "text.secondary",
+                  }}
+                >
+                  Data
                 </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            </TableHead>
+
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow
+                  key={order.id}
+                  hover
+                  sx={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    navigate(`/orders/${order.id}`)
+                  }
+                >
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                    >
+                      #{order.id.slice(-8)}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell>
+                    <Chip
+                      label={translateOrderStatus(
+                        order.status,
+                      )}
+                      color={getStatusColor(
+                        order.status,
+                      )}
+                      size="small"
+                      sx={{
+                        fontWeight: 500,
+                      }}
+                    />
+                  </TableCell>
+
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {formatCurrencyBrl(
+                        order.total,
+                      )}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      {formatTimestampBr(
+                        order.createdAt,
+                      )}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+              {!orders.length && (
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    colSpan={4}
+                    sx={{
+                      py: 5,
+                      color: "text.secondary",
+                    }}
+                  >
+                    <Typography variant="body2">
+                      Nenhum pedido encontrado.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </CardContent>
     </Card>
   );

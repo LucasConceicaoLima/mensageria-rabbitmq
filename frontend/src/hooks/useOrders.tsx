@@ -15,6 +15,7 @@ export const useOrders = () =>
   useQuery({
     queryKey: ["orders"],
     queryFn: getOrders,
+    refetchInterval: 5000,
   });
 
 export const useOrder = (id: string) =>
@@ -22,7 +23,18 @@ export const useOrder = (id: string) =>
     queryKey: ["orders", id],
     queryFn: () => getOrderById(id),
 
-    refetchInterval: 3000,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+
+      if (
+        status === "APPROVED" ||
+        status === "REJECTED"
+      ) {
+        return false;
+      }
+
+      return 3000;
+    },
   });
 
 export const useCreateOrder = () => {

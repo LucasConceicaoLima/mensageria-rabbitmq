@@ -258,7 +258,6 @@ const ProductsPage = () => {
           <TextField
             fullWidth
             size="small"
-            placeholder="Pesquisar produtos..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)

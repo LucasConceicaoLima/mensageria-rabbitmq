@@ -170,7 +170,6 @@ export default function OrdersPage() {
           <Box mb={2}>
             <TextField
               size="small"
-              placeholder="Buscar por pedido ou produto..."
               value={search}
               onChange={(e) =>
                 setSearch(e.target.value)
@@ -208,10 +207,15 @@ export default function OrdersPage() {
           >
             <Tabs
               value={statusFilter}
-              onChange={(_, value) =>
-                setStatusFilter(value)
-              }
-              variant="standard"
+              onChange={(_, value) => setStatusFilter(value)}
+              variant="fullWidth"
+              sx={{
+                minWidth: 600,
+                "& .MuiTab-root": {
+                  flex: 1,
+                  maxWidth: "none",
+                },
+              }}
             >
               <Tab
                 value="ALL"
@@ -220,9 +224,17 @@ export default function OrdersPage() {
                     color="primary"
                     badgeContent={counts.ALL}
                     max={99}
-
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        position: "static",
+                        transform: "none",
+                        marginLeft: 1,
+                      },
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box sx={{pr: 3}}>Todos</Box>
+                    <Box>Todos</Box>
                   </Badge>
                 }
               />
@@ -234,8 +246,17 @@ export default function OrdersPage() {
                     color="warning"
                     badgeContent={counts.PENDING}
                     max={99}
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        position: "static",
+                        transform: "none",
+                        marginLeft: 1,
+                      },
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box sx={{pr: 3}}>Pendente</Box>
+                    <Box>Pendente</Box>
                   </Badge>
                 }
               />
@@ -245,15 +266,19 @@ export default function OrdersPage() {
                 label={
                   <Badge
                     color="info"
-                    badgeContent={
-                      counts.PROCESSING_PAYMENT
-                    }
+                    badgeContent={counts.PROCESSING_PAYMENT}
                     max={99}
-                    
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        position: "static",
+                        transform: "none",
+                        marginLeft: 1,
+                      },
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box sx={{pr: 3}}>
-                      Processando
-                    </Box>
+                    <Box>Processando</Box>
                   </Badge>
                 }
               />
@@ -265,9 +290,17 @@ export default function OrdersPage() {
                     color="success"
                     badgeContent={counts.APPROVED}
                     max={99}
-
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        position: "static",
+                        transform: "none",
+                        marginLeft: 1,
+                      },
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box sx={{pr: 3}}>Aprovado</Box>
+                    <Box>Aprovado</Box>
                   </Badge>
                 }
               />
@@ -279,8 +312,17 @@ export default function OrdersPage() {
                     color="error"
                     badgeContent={counts.REJECTED}
                     max={99}
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        position: "static",
+                        transform: "none",
+                        marginLeft: 1,
+                      },
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box sx={{pr: 3}}>Rejeitado</Box>
+                    <Box>Rejeitado</Box>
                   </Badge>
                 }
               />
