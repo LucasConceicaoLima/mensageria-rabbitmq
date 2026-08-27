@@ -10,6 +10,7 @@ import * as amqp from 'amqplib';
 import {
   RABBITMQ_QUEUE,
   RABBITMQ_RETRY_QUEUE,
+  RABBITMQ_DLQ,
   MAX_RETRIES,
   RETRY_DELAY,
 } from './rabbitmq.constants';
@@ -25,26 +26,48 @@ export class RabbitMQService
   private connection!: amqp.ChannelModel;
   private channel!: amqp.Channel;
 
+  constructor(
+    private readonly configService: ConfigService,
+  ) {}
+
   async onModuleInit() {
     const url =
       this.configService.get<string>('RABBITMQ_URL');
 
     if (!url) {
-      throw new Error('RABBITMQ_URL not configured.');
+      throw new Error(
+        'RABBITMQ_URL not configured.',
+      );
     }
 
-    this.connection = await amqp.connect(url);
+    this.connection =
+      await amqp.connect(url);
 
     this.channel =
       await this.connection.createChannel();
 
+    // Dead Letter Queue
     await this.channel.assertQueue(
-      RABBITMQ_QUEUE,
+      RABBITMQ_DLQ,
       {
         durable: true,
       },
     );
 
+    // Fila principal
+    await this.channel.assertQueue(
+      RABBITMQ_QUEUE,
+      {
+        durable: true,
+        arguments: {
+          'x-dead-letter-exchange': '',
+          'x-dead-letter-routing-key':
+            RABBITMQ_DLQ,
+        },
+      },
+    );
+
+    // Fila de retry
     await this.channel.assertQueue(
       RABBITMQ_RETRY_QUEUE,
       {
@@ -69,11 +92,11 @@ export class RabbitMQService
     this.logger.log(
       `Retry queue "${RABBITMQ_RETRY_QUEUE}" is ready`,
     );
-  }
 
-  constructor(
-    private readonly configService: ConfigService,
-  ) {}
+    this.logger.log(
+      `DLQ "${RABBITMQ_DLQ}" is ready`,
+    );
+  }
 
   async onModuleDestroy() {
     await this.channel?.close();
@@ -136,7 +159,6 @@ export class RabbitMQService
             );
 
             await this.handleRetry(
-              queue,
               msg,
             );
           }
@@ -150,7 +172,6 @@ export class RabbitMQService
   }
 
   private async handleRetry(
-    queue: string,
     msg: amqp.ConsumeMessage,
   ) {
     const retryCount = Number(
@@ -161,14 +182,23 @@ export class RabbitMQService
 
     if (retryCount >= MAX_RETRIES) {
       this.logger.error(
-        `Message exceeded maximum retries (${MAX_RETRIES}).`,
+        `Message exceeded maximum retries (${MAX_RETRIES}). Sending to DLQ.`,
       );
 
-      this.channel.nack(
-        msg,
-        false,
-        false,
+      this.channel.sendToQueue(
+        RABBITMQ_DLQ,
+        msg.content,
+        {
+          persistent: true,
+          headers: {
+            ...msg.properties.headers,
+            'x-retry-count':
+              retryCount,
+          },
+        },
       );
+
+      this.channel.ack(msg);
 
       return;
     }
