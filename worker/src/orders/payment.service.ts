@@ -18,6 +18,16 @@ export class PaymentService {
       throw new NotFoundException(`Order ${orderId} not found.`);
     }
 
+    // TESTE DE RETRY - remover depois
+    const simulateError =
+      process.env.SIMULATE_PAYMENT_ERROR === 'true';
+
+    if (simulateError) {
+      throw new Error(
+        'Erro simulado para testar retry.',
+      );
+    }
+
     // Atualiza para PROCESSING_PAYMENT
     await this.ordersRepository.executeTransaction(async (tx) => {
       await this.ordersRepository.updateStatus(
