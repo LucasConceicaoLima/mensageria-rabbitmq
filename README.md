@@ -548,4 +548,3 @@ Este projeto foi desenvolvido para praticar e consolidar conhecimentos em:
 **Lucas Conceição Lima**
 
 Desenvolvedor Full Stack com foco em React, NestJS, TypeScript, SQL, Prisma e automação de processos.
-```
