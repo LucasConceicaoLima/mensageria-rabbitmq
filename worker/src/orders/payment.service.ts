@@ -1,4 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { OrderStatus } from '@prisma/client';
 
 import { OrdersRepository } from './repositories/orders.repository';
@@ -9,6 +10,7 @@ export class PaymentService {
 
   constructor(
     private readonly ordersRepository: OrdersRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   async process(orderId: string): Promise<void> {
@@ -18,54 +20,54 @@ export class PaymentService {
       throw new NotFoundException(`Order ${orderId} not found.`);
     }
 
-    // TESTE DE RETRY - remover depois
     const simulateError =
-      process.env.SIMULATE_PAYMENT_ERROR === 'true';
+      this.configService.get<string>('SIMULATE_PAYMENT_ERROR') === 'true';
 
     if (simulateError) {
-      throw new Error(
-        'Erro simulado para testar retry.',
-      );
+      throw new Error('Erro simulado para testar retry.');
     }
 
-    // Atualiza para PROCESSING_PAYMENT
-    await this.ordersRepository.executeTransaction(async (tx) => {
-      await this.ordersRepository.updateStatus(
-        order.id,
-        OrderStatus.PROCESSING_PAYMENT,
-        {},
-        tx,
-      );
+    const started = await this.ordersRepository.executeTransaction(
+      async (tx) => {
+        const updated = await this.ordersRepository.startPayment(order.id, tx);
 
-      await this.ordersRepository.createEvent(
-        {
-          status: OrderStatus.PROCESSING_PAYMENT,
-          message: 'Processing payment.',
-          order: {
-            connect: {
-              id: order.id,
+        if (!updated) {
+          return false;
+        }
+
+        await this.ordersRepository.createEvent(
+          {
+            status: OrderStatus.PROCESSING_PAYMENT,
+            message: 'Processing payment.',
+            order: {
+              connect: {
+                id: order.id,
+              },
             },
           },
-        },
-        tx,
-      );
-    });
+          tx,
+        );
 
-    this.logger.log(
-      `Order ${order.id} is now PROCESSING_PAYMENT.`,
+        return true;
+      },
     );
 
-    // Simula um gateway de pagamento
+    if (!started) {
+      this.logger.warn(
+        `Order ${order.id} is already being processed or has been processed.`,
+      );
+
+      return;
+    }
+
+    this.logger.log(`Order ${order.id} is now PROCESSING_PAYMENT.`);
+
     await this.sleep(3000);
 
-    // Regra temporária de aprovação
     const approved = Number(order.total) <= 1000;
 
-    const finalStatus = approved
-      ? OrderStatus.APPROVED
-      : OrderStatus.REJECTED;
+    const finalStatus = approved ? OrderStatus.APPROVED : OrderStatus.REJECTED;
 
-    // Atualiza o status final
     await this.ordersRepository.executeTransaction(async (tx) => {
       await this.ordersRepository.updateStatus(
         order.id,
@@ -79,9 +81,7 @@ export class PaymentService {
       await this.ordersRepository.createEvent(
         {
           status: finalStatus,
-          message: approved
-            ? 'Payment approved.'
-            : 'Payment rejected.',
+          message: approved ? 'Payment approved.' : 'Payment rejected.',
           order: {
             connect: {
               id: order.id,
@@ -92,9 +92,7 @@ export class PaymentService {
       );
     });
 
-    this.logger.log(
-      `Order ${order.id} finished with status ${finalStatus}.`,
-    );
+    this.logger.log(`Order ${order.id} finished with status ${finalStatus}.`);
   }
 
   private sleep(ms: number): Promise<void> {

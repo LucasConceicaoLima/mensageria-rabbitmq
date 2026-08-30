@@ -26,8 +26,29 @@ export class OrderConsumerService implements OnModuleInit {
   }
 
   private async handleMessage(message: OrderCreatedMessage) {
-    this.logger.log(`Received order ${message.orderId}`);
+    const startedAt = Date.now();
 
-    await this.paymentService.process(message.orderId);
+    this.logger.log(
+      `[PROCESSING] orderId=${message.orderId} event=${message.event} total=${message.total}`,
+    );
+
+    try {
+      await this.paymentService.process(message.orderId);
+
+      const duration = Date.now() - startedAt;
+
+      this.logger.log(
+        `[COMPLETED] orderId=${message.orderId} duration=${duration}ms`,
+      );
+    } catch (error) {
+      const duration = Date.now() - startedAt;
+
+      this.logger.error(
+        `[FAILED] orderId=${message.orderId} duration=${duration}ms`,
+        error instanceof Error ? error.stack : String(error),
+      );
+
+      throw error;
+    }
   }
 }
