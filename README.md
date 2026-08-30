@@ -543,20 +543,6 @@ Este projeto foi desenvolvido para praticar e consolidar conhecimentos em:
 
 ---
 
-## Melhorias Futuras
-
-O projeto foi desenvolvido com foco em **estudo de mensageria e processamento assíncrono**, portanto alguns recursos ficam deliberadamente fora do escopo atual.
-
-Possíveis extensões:
-
-- Autenticação e autorização com JWT
-- WebSockets para atualização de pedidos em tempo real
-- Testes de integração com RabbitMQ e MySQL
-- Observabilidade e métricas
-- Novos tipos de processamento assíncrono
-
----
-
 ## Autor
 
 **Lucas Conceição Lima**
